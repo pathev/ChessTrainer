@@ -1,1 +1,2 @@
-chess==1.7.0
+chess>=1.7.0
+Stockfish
