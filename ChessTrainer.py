@@ -1,0 +1,783 @@
+#! /usr/bin/python3
+# -*- coding: utf-8 -*-
+#
+# Version : 1.1
+#
+# ChessTrainer (c) by Patrick Thévenon
+# ChessTrainer is licensed under a
+# Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+#
+# You should have received a copy of the license along with this
+# work.  If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
+
+#####################################
+#                                   #
+#         Patrick Thévenon          #
+#                                   #
+#       de Octobre 2021             #
+#             à Novembre 2021       #
+#                                   #
+#####################################
+
+import chess
+import chess.pgn as pgn
+import asyncio
+import chess.engine
+import tkinter as tk
+from tkinter.filedialog import askopenfilename, asksaveasfile
+from tkinter.messagebox import askokcancel, showinfo
+from PIL import Image, ImageTk
+from random import choice
+
+arrow_color = ["#FF3333","#FF9933","#FFFF33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
+comment_arrow_color = {"red": "#FFCCCC", "yellow": "#FFFFCC", "blue": "#CCCCFF", "green": "#CCFFCC"}
+analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
+stockfish_path = "/usr/games/stockfish"
+maxthreads = 4
+
+asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
+
+class GUI(tk.Tk):
+    square_size=64
+    selected_square = None
+    hilighted = []
+    icons = {}
+    flipped=False
+
+    editing=True
+    fen_reglages=None
+    fen_change_comment=None
+    training=False
+    analyzing=False
+    analysis=None
+
+    def __init__(self):
+
+        tk.Tk.__init__(self)
+
+        self.title("Opening trainer")
+        self.minsize(470,250)
+        self.protocol('WM_DELETE_WINDOW',self.quit_prog)
+
+        self.MainFrame = tk.Frame(self)
+
+        self.MainFrame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        self.buttons_frame = tk.Frame(self.MainFrame)
+        self.buttons_frame.pack(side=tk.BOTTOM,fill=tk.X)
+
+        self.canvas = tk.Canvas(self.MainFrame, height=8*self.square_size, width=8*self.square_size,background="grey")
+
+        self.canvas.bind("<Configure>", self.refresh)
+        self.canvas.bind("<Button-1>", self.click_edit)
+
+        self.canvas.pack(side=tk.BOTTOM,expand=True,fill=tk.BOTH)
+        
+        self.mainbar = tk.Frame(self.buttons_frame)
+
+        self.button_quit = tk.Button(self.mainbar, text="New", command=self.before_new)
+        self.button_quit.pack(side=tk.LEFT)
+        self.button_flip = tk.Button(self.mainbar, text="Flip", command=self.flip)
+        self.button_flip.pack(side=tk.LEFT)
+        self.button_load = tk.Button(self.mainbar, text="Load pgn",  command=self.load)
+        self.button_load.pack(side=tk.LEFT)
+        self.button_save = tk.Button(self.mainbar, text="Save pgn",  command=self.save)
+        self.button_save.pack(side=tk.LEFT)
+        self.button_analyze = tk.Button(self.mainbar, text="Analyze", command=lambda : asyncio.run(self.start_analyze()))
+        self.button_analyze.pack(side=tk.LEFT)
+        self.label_score = tk.Label(self.mainbar, text="")
+        self.label_score.pack(side=tk.LEFT)
+        self.button_quit = tk.Button(self.mainbar, text="Quit", command=self.quit_prog)
+        self.button_quit.pack(side=tk.RIGHT)
+
+        self.mainbar.pack(fill=tk.X)
+
+        self.navbar = tk.Frame(self.buttons_frame)
+
+        self.sel_game_var=tk.StringVar(self.fen_reglages)
+        self.sel_game_var.set("Select game")
+        self.sel_game_menu = tk.OptionMenu(self.navbar,self.sel_game_var,"Select game")
+        self.sel_game_var.trace("w",lambda *args:self.change_game(self.sel_game_var.get()))
+        self.sel_game_menu.pack(side=tk.LEFT)
+
+        self.button_fullback = tk.Button(self.navbar, text="|<", command=self.fullback,state=tk.DISABLED)
+        self.button_fullback.pack(side=tk.LEFT)
+        self.button_back = tk.Button(self.navbar, text="<", command=self.back,state=tk.DISABLED)
+        self.button_back.pack(side=tk.LEFT)
+        self.button_forward = tk.Button(self.navbar, text=">", command=self.forward,state=tk.DISABLED)
+        self.button_forward.pack(side=tk.LEFT)
+        self.button_fullforward = tk.Button(self.navbar, text=">|", command=self.fullforward,state=tk.DISABLED)
+        self.button_fullforward.pack(side=tk.LEFT)
+        self.button_train = tk.Button(self.navbar, text="Train", command=self.train)
+        self.button_train.pack(side=tk.RIGHT)
+        self.button_edit = tk.Button(self.navbar, text="Edit", command=self.edit,state=tk.DISABLED)
+        self.button_edit.pack(side=tk.RIGHT)
+        
+        self.navbar.pack(fill=tk.X)
+
+        self.editbar = tk.Frame(self.buttons_frame)
+
+        self.button_promote_to_main = tk.Button(self.editbar, text="Promote to main", command=self.promote_to_main,state=tk.DISABLED)
+        self.button_promote_to_main.pack(side=tk.LEFT)
+        self.button_promote = tk.Button(self.editbar, text="Promote", command=self.promote,state=tk.DISABLED)
+        self.button_promote.pack(side=tk.LEFT)
+        self.button_demote = tk.Button(self.editbar, text="Demote", command=self.demote,state=tk.DISABLED)
+        self.button_demote.pack(side=tk.LEFT)
+        self.button_remove = tk.Button(self.editbar, text="Remove", command=self.remove,state=tk.DISABLED)
+        self.button_remove.pack(side=tk.LEFT)
+        self.button_read = tk.Button(self.editbar, text="Read only", command=self.read)
+        self.button_read.pack(side=tk.RIGHT)
+
+        self.trainbar = tk.Frame(self.buttons_frame)
+
+        self.button_clue = tk.Button(self.trainbar, text="Clue", command=self.clue)
+        self.button_clue.pack(side=tk.LEFT)
+        self.button_stop = tk.Button(self.trainbar, text="Stop", command=self.stop)
+        self.button_stop.pack(side=tk.RIGHT)
+
+        self.frame_infos = tk.Frame(master=self,bg="white")
+
+        self.label_filename = tk.Label(self.frame_infos, text="", bg="white")
+        self.label_filename.pack()
+        self.text_headers = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=8)
+        self.text_headers.pack()
+        self.text_fen_line = tk.Text(self.frame_infos, state=tk.DISABLED, width=60,height=2)
+        self.text_fen_line.pack()
+        self.text_san_line = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=14)
+        self.text_san_line.pack()
+        self.text_comment = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=10)
+        self.text_comment.pack()
+
+    def navbar_states(self):
+        if self.pgn.parent is None:
+            self.button_back.configure(state=tk.DISABLED)
+            self.button_fullback.configure(state=tk.DISABLED)
+            if self.pgn.variations:
+                self.button_save.configure(state=tk.NORMAL)
+                self.button_train.configure(state=tk.NORMAL)
+            else:
+                self.button_save.configure(state=tk.DISABLED)
+                self.button_train.configure(state=tk.DISABLED)
+        else:
+            self.button_save.configure(state=tk.NORMAL)
+            self.button_train.configure(state=tk.NORMAL)
+            self.button_back.configure(state=tk.NORMAL)
+            self.button_fullback.configure(state=tk.NORMAL)
+
+        self.text_headers.configure(state=tk.NORMAL)
+        self.text_headers.delete(1.0,"end")
+        for key,value in self.pgn.game().headers.items():
+            self.text_headers.insert("end",key+": "+value+"\n")
+        self.text_headers.configure(state=tk.DISABLED)
+
+        if self.pgn.variations:
+            self.button_forward.configure(state=tk.NORMAL)
+            self.button_fullforward.configure(state=tk.NORMAL)
+        else:
+            self.button_forward.configure(state=tk.DISABLED)
+            self.button_fullforward.configure(state=tk.DISABLED)
+
+    def editbar_states(self):
+        if self.pgn.parent is not None:
+            if self.pgn.is_main_variation():
+                self.button_promote_to_main.configure(state=tk.DISABLED)
+                self.button_promote.configure(state=tk.DISABLED)
+            else:
+                self.button_promote_to_main.configure(state=tk.NORMAL)
+                self.button_promote.configure(state=tk.NORMAL)
+            self.button_demote.configure(state=tk.NORMAL)
+            self.button_remove.configure(state=tk.NORMAL)
+        else:
+            self.button_promote_to_main.configure(state=tk.DISABLED)
+            self.button_promote.configure(state=tk.DISABLED)
+            self.button_demote.configure(state=tk.DISABLED)
+            self.button_remove.configure(state=tk.DISABLED)
+
+    def set_pgn(self):
+        self.chessboard = self.pgn.board()
+        if self.analyzing:
+            self.change_analyze()
+        if self.editing:
+            self.editbar_states()
+        if not self.training:
+            self.change_fen_line()
+            self.change_san_line()
+            self.change_comment()
+            self.navbar_states()
+        self.refresh()
+
+    def before_new(self):
+        if askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel'):
+            self.new()
+
+    def new(self):
+        self.pgn=pgn.Game()
+        self.pgn_games=[self.pgn.game()]
+        self.pgn_index=0
+        self.change_game_list()
+        self.canvas.delete("arrow")
+        self.chessboard = self.pgn.board()
+        self.label_filename.configure(text="")
+        self.edit()
+        self.set_pgn()
+
+    def flip(self):
+        self.flipped=not(self.flipped)
+        self.refresh()
+
+    def load(self):
+        filename = askopenfilename()
+        if filename:
+            file = open(filename)
+            filebasename=filename.split('/')[-1].split('.')[0]
+            self.label_filename.configure(text=filebasename)
+            self.pgn_games=[]
+            game = pgn.read_game(file)
+            while game is not None:
+                self.pgn_games.append(game)
+                game = pgn.read_game(file)
+            self.pgn_index=0
+            self.change_game_list()
+            self.read()
+            self.pgn = self.pgn_games[self.pgn_index]
+            self.set_pgn()
+
+    def change_game_list(self):
+        self.sel_game_menu['menu'].delete(0,"end")
+        for i,game in enumerate(self.pgn_games):
+            v=str(i+1)+". "+game.headers["Event"]
+            self.sel_game_menu['menu'].add_command(label=v, command = lambda v=v : self.sel_game_var.set(v))
+
+    def save(self):
+        pgn_file = asksaveasfile()
+        print(self.pgn.game(), file=pgn_file, end="\n\n")
+
+    async def start_analyze(self):
+        self.analyzing = True
+        self.button_analyze.configure(text="Stop",command=self.stop_analyze)
+        self.transport, self.engine = await chess.engine.popen_uci(stockfish_path)
+        await self.engine.configure({"Threads":maxthreads})
+        while self.analyzing:
+            self.changing = False
+            self.analysis = await self.engine.analysis(self.chessboard,multipv=3)
+            await asyncio.gather(self.updater(),self.analyze())
+        await self.engine.quit()
+        self.canvas.delete("analyze_arrow")
+        self.button_analyze.configure(text="Analyze",command=lambda : asyncio.run(self.start_analyze()))
+        self.label_score.configure(text="")
+
+    async def analyze(self):
+        while not self.changing and self.analyzing:
+            try :
+                info = await self.analysis.get()
+                score = info.get("score")
+                if score is not None and info.get("multipv") == 1:
+                    label=self.readable(score.white(),info.get("depth"))
+                    self.label_score.configure(text=label)
+                    if score.is_mate():
+                        if score.relative.mate() == 0:
+                            break
+                        else:
+                            await asyncio.sleep(0.5)
+                    if not self.training:
+                        self.draw_analyze_arrows([info.get("pv")[0] for info in self.analysis.multipv])
+            except chess.engine.AnalysisComplete:
+                break
+        self.analysis.stop()
+        self.analysis = None
+
+    def readable(self,score,depth):
+        val = score.score()
+        if val is not None:
+            if val >0:
+                text="+"
+            else:
+                text=""
+            text += str(val/100)
+            depth = str(depth)
+            return text+" (dep "+depth+")"
+        else:
+            mat = str(score.mate())
+            return "Mate in "+mat
+
+    def stop_analyze(self):
+        self.analyzing = False
+
+    def change_analyze(self):
+        self.changing = True
+
+    async def updater(self):
+        while (self.analysis is not None) or (self.analyzing and (not self.changing)):
+            self.update()
+            await asyncio.sleep(1/120)
+
+    def quit_prog(self):
+        if askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel'):
+            if self.analyzing:
+                self.analyzing = False
+            self.wait_before_quit()
+
+    def wait_before_quit(self):
+        if self.analysis is not None:
+            self.after(20,self.wait_before_quit)
+        else:
+            self.destroy()
+
+    def promote_to_main(self):
+        self.pgn.parent.promote_to_main(self.pgn)
+        self.set_pgn()
+
+    def promote(self):
+        self.pgn.parent.promote(self.pgn)
+        self.set_pgn()
+
+    def demote(self):
+        self.pgn.parent.demote(self.pgn)
+        self.set_pgn()
+
+    def remove(self):
+        if askokcancel("Are you sure ?","Node and variations will be lost",icon='warning',default='cancel'):
+            self.pgn.parent.remove_variation(self.pgn)
+            self.pgn = self.pgn.parent
+            self.set_pgn()
+
+    def clue(self):
+        self.selected_square = self.pgn.variations[0].move.from_square
+        self.hilight(self.selected_square)
+        self.refresh()
+
+    def stop(self):
+        self.trainbar.pack_forget()
+        self.training=False
+        self.set_pgn()
+        if self.editing:
+            self.edit()
+        else:
+            self.edit()
+            self.read()
+
+    def read(self):
+        self.editing = False
+        self.editbar.pack_forget()
+        self.button_edit.configure(state=tk.NORMAL)
+        self.canvas.unbind("<Button-1>")
+        self.canvas.bind("<Button-1>", self.click_read)
+        self.text_comment.unbind("<Button-1>")
+        self.text_headers.unbind("<Button-1>")
+
+    def edit(self):
+        self.navbar.pack(fill=tk.X)
+        self.editbar.pack(fill=tk.X)
+        self.frame_infos.pack(side=tk.LEFT,fill=tk.Y)
+        self.editing = True
+        self.button_edit.configure(state=tk.DISABLED)
+        self.editbar.pack(fill=tk.X)
+        self.editbar_states()
+        self.canvas.unbind("<Button-1>")
+        self.canvas.bind("<Button-1>", self.click_edit)
+        self.text_headers.unbind("<Button-1>")
+        self.text_comment.unbind("<Button-1>")
+        self.text_headers.bind("<Button-1>", self.edit_headers)
+        self.text_comment.bind("<Button-1>", self.edit_comment)
+
+    def edit_headers(self,event):
+        self.text_headers.unbind("<Button-1>")
+        
+        fen_change_headers = tk.Toplevel(master=self,bg="white")
+        fen_change_headers.transient(self)
+        fen_change_headers.resizable(width=tk.FALSE,height=tk.FALSE)
+        fen_change_headers.title("Headers")
+        fen_change_headers.protocol('WM_DELETE_WINDOW',lambda :None)
+
+        text_list=[None for _ in range(len(self.pgn.headers))]
+        for i,(key,value) in enumerate(self.pgn.headers.items()):
+            f = tk.Frame(fen_change_headers)
+            l = tk.Label(f,text=key,bg="white",width=10)
+            l.pack(side=tk.LEFT)
+            t = tk.Text(f,height=1,width=60)
+            text_list[i]=t
+            t.insert("end",value)
+            t.pack(side=tk.LEFT)
+            f.pack()
+        frame_action = tk.Frame(fen_change_headers)
+
+        button_go=tk.Button(frame_action,text="Change",command=lambda :self.accept_headers(fen_change_headers,text_list))
+        button_go.pack(side=tk.RIGHT)
+        button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.destroy_change_headers(fen_change_headers))
+        button_cancel.pack(side=tk.RIGHT)
+
+        frame_action.pack()
+
+    def destroy_change_headers(self,fen):
+        fen.destroy()
+        self.text_headers.bind("<Button-1>", self.edit_headers)
+
+    def accept_headers(self,fen,text_list):
+        for i,key in enumerate(self.pgn.headers):
+            self.pgn.headers[key] = text_list[i].get(1.0,"end")[:-1]
+        self.change_headers()
+        self.destroy_change_headers(fen)
+
+    def edit_comment(self,event):
+        if self.fen_change_comment is None:
+            self.fen_change_comment = tk.Toplevel(master=self,bg="white")
+            self.fen_change_comment.transient(self)
+            self.fen_change_comment.resizable(width=tk.FALSE,height=tk.FALSE)
+            self.fen_change_comment.title("Comment")
+            self.fen_change_comment.protocol('WM_DELETE_WINDOW',lambda :None)
+            self.text_newcomment = tk.Text(self.fen_change_comment, wrap="word", width=60,height=10)
+            self.text_newcomment.pack()
+            frame_action = tk.Frame(self.fen_change_comment)
+
+            button_go=tk.Button(frame_action,text="Change",command=self.accept_comment)
+            button_go.pack(side=tk.RIGHT)
+            button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.fen_change_comment.withdraw())
+            button_cancel.pack(side=tk.RIGHT)
+
+            frame_action.pack()
+        else:
+            self.fen_change_comment.deiconify()
+        self.text_newcomment.delete(1.0,"end")
+        self.text_newcomment.insert("end",self.pgn.comment.split("[%")[0])
+        self.text_newcomment.wait_visibility()
+        self.text_newcomment.mark_set(tk.INSERT,self.text_newcomment.index("end"))
+        self.text_newcomment.focus_set()
+
+    def accept_comment(self):
+        self.fen_change_comment.withdraw()
+        self.pgn.comment = self.text_newcomment.get(1.0,"end")[:-1]+"".join(self.pgn.comment.split("[%")[1:])
+        self.change_comment()
+
+    def train(self):
+        if self.fen_reglages is None:
+            self.fen_reglages = tk.Toplevel(master=self,bg="white")
+            self.fen_reglages.transient(self)
+            self.fen_reglages.resizable(width=tk.FALSE,height=tk.FALSE)
+            self.fen_reglages.title("Settings")
+            self.fen_reglages.protocol('WM_DELETE_WINDOW',lambda :None)
+
+            lbl_coul=tk.Label(self.fen_reglages,text="Train as:",bg="white")
+            self.val_coul=tk.StringVar(self.fen_reglages)
+            self.val_coul.set("white")
+            lstbox_coul=tk.OptionMenu(self.fen_reglages,self.val_coul,"white","black")
+
+            lbl_ecart=tk.Label(self.fen_reglages,text="Allowed gap from main move:",bg="white")
+            self.val_ecart=tk.IntVar(self.fen_reglages)
+            self.val_ecart.set(0)
+            lstbox_ecart=tk.OptionMenu(self.fen_reglages,self.val_ecart,0,1,2,3)
+
+            lbl_choix_partie=tk.Label(self.fen_reglages,text="Game choice:",bg="white")
+            self.val_choix=tk.StringVar(self.fen_reglages)
+            self.val_choix.set("current")
+            lstbox_choix_partie=tk.OptionMenu(self.fen_reglages,self.val_choix,"current","random")
+
+            frame_action = tk.Frame(self.fen_reglages)
+
+            button_go=tk.Button(frame_action,text="Let's go!",command=self.train_go)
+            button_go.pack(side=tk.RIGHT)
+            button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.fen_reglages.withdraw())
+            button_cancel.pack(side=tk.RIGHT)
+
+            lbl_coul.pack()
+            lstbox_coul.pack()
+            lbl_ecart.pack()
+            lstbox_ecart.pack()
+            lbl_choix_partie.pack()
+            lstbox_choix_partie.pack()
+            frame_action.pack()
+        else:
+            self.fen_reglages.deiconify()
+
+    def train_go(self):
+        self.fen_reglages.withdraw()
+        self.player_color = chess.WHITE if self.val_coul.get() == "white" else chess.BLACK
+        self.flipped = not self.player_color
+        if self.val_choix.get() == "random":
+            self.pgn = choice(self.pgn_games)
+            self.pgn_index = self.pgn_games.index(self.pgn)
+        else:
+            self.pgn = self.pgn.game()
+        self.editbar.pack_forget()
+        self.navbar.pack_forget()
+        self.frame_infos.pack_forget()
+        self.trainbar.pack(fill=tk.X)
+        self.canvas.unbind("<Button-1>")
+        self.canvas.bind("<Button-1>",self.click_train)
+        self.training=True
+        if self.pgn.turn() != self.player_color:
+            self.choose_move()
+        else:
+            self.chessboard = self.pgn.board()
+            self.refresh()
+
+    def choose_move(self):
+        if self.pgn.variations:
+            self.pgn = choice(self.pgn.variations)
+            self.set_pgn()
+            if not self.pgn.variations:
+                showinfo("The end","Back to navigation")
+                self.stop()
+            elif self.analyzing:
+                self.change_analyze()
+        else:
+            self.set_pgn()
+            showinfo("The end","Back to navigation")
+            self.stop()
+
+    def change_game(self,Event):
+        if Event != "Select game":
+            self.pgn_index=int(self.sel_game_var.get().split(".")[0])-1
+            self.pgn = self.pgn_games[self.pgn_index]
+            self.change_headers()
+            self.set_pgn()
+            self.sel_game_var.set("Select game")
+            self.sel_game_menu.event_generate("<Enter>") #
+            self.sel_game_menu.event_generate("<Leave>") # Pas trouvé comment faire mieux
+
+    def fullback(self):
+        self.pgn = self.pgn.game()
+        self.set_pgn()
+
+    def back(self):
+        self.pgn = self.pgn.parent
+        self.set_pgn()
+
+    def forward(self):
+        self.pgn = self.pgn.variations[0]
+        self.set_pgn()
+
+    def fullforward(self):
+        self.pgn = self.pgn.end()
+        self.set_pgn()
+
+    def change_headers(self):
+        self.text_headers.configure(state=tk.NORMAL)
+        self.text_headers.delete(1.0,"end")
+        for key,value in self.pgn.headers.items():
+            self.text_headers.insert("end",key+": "+value+"\n")
+        self.text_headers.configure(state=tk.DISABLED)
+
+    def change_fen_line(self):
+        self.text_fen_line.configure(state=tk.NORMAL)
+        self.text_fen_line.delete(1.0,"end")
+        self.text_fen_line.insert("end",self.pgn.board().fen())
+        self.text_fen_line.configure(state=tk.DISABLED)
+
+    def change_san_line(self):
+        self.text_san_line.configure(state=tk.NORMAL)
+        self.text_san_line.delete(1.0,"end")
+        if self.chessboard.move_stack != []:
+            self.text_san_line.insert("end",self.pgn_games[self.pgn_index].board().variation_san(self.chessboard.move_stack))
+        self.text_san_line.configure(state=tk.DISABLED)
+
+    def change_comment(self):
+        self.text_comment.configure(state=tk.NORMAL)
+        self.text_comment.delete(1.0,"end")
+        self.text_comment.insert("end",self.pgn.comment.split("[%")[0])
+        self.text_comment.configure(state=tk.DISABLED)
+
+    def click_edit(self, event):
+        current_column = event.x // self.square_size
+        current_row = 7 - (event.y // self.square_size)
+        if self.flipped:
+            current_row = 7-current_row
+            current_column = 7-current_column
+
+        square = chess.square(current_column, current_row)
+
+        if self.selected_square is not None:
+            if square in self.hilighted:
+                move=chess.Move(from_square=self.selected_square,to_square=square)
+                if self.pgn.has_variation(move):
+                    self.pgn = self.pgn.variation(move)
+                else:
+                    self.pgn.add_variation(move)
+                    self.pgn = self.pgn.variations[-1]
+                self.set_pgn()
+                if self.analyzing:
+                    self.change_analyze()
+            self.selected_square = None
+            self.hilighted = []
+        else:
+            self.hilight(square)
+        self.refresh()
+
+    def click_read(self, event):
+
+        if len(self.pgn.variations) == 1: # Une seule variation/flèche ; où que l’on clique, le coup est joué
+            self.pgn = self.pgn.variations[0]
+            self.set_pgn()
+        else:
+            current_column = event.x // self.square_size
+            current_row = 7 - (event.y // self.square_size)
+            if self.flipped:
+                current_row = 7-current_row
+                current_column = 7-current_column
+            square = chess.square(current_column, current_row)
+
+            if self.selected_square is not None:
+                self.selected_square = None
+                self.hilighted = []
+                self.refresh()
+                move=chess.Move(from_square=self.selected_square,to_square=square)
+                if move is self.pgn.has_variation(move):
+                    self.pgn = self.pgn.variation(move)
+                    self.set_pgn()
+            else:
+                to_square_var_list = list(filter(lambda n:n.move.to_square == square,self.pgn.variations))
+                if len(to_square_var_list) == 1:
+                    self.pgn = to_square_var_list[0]
+                    self.set_pgn()
+                else:
+                    from_square_var_list=list(filter(lambda n:n.move.from_square == square,self.pgn.variations))
+                    if len(from_square_var_list) == 1:
+                        self.pgn = from_square_var_list[0]
+                        self.set_pgn()
+                    elif len(from_square_var_list) >=1:
+                        self.selected_square = square
+                        self.hilighted = [n.move.to_square for n in from_square_var_list]
+                        self.refresh()
+
+    def click_train(self, event):
+        current_column = event.x // self.square_size
+        current_row = 7 - (event.y // self.square_size)
+        if self.flipped:
+            current_row = 7-current_row
+            current_column = 7-current_column
+
+        square = chess.square(current_column,current_row)
+
+        if self.selected_square is not None:
+            move=chess.Move(from_square=self.selected_square,to_square=square)
+            self.selected_square = None
+            self.hilighted = []
+            if self.pgn.has_variation(move):
+                child = self.pgn.variation(move)
+                i = self.pgn.variations.index(child)
+                if i<=self.val_ecart.get():
+                    self.pgn = child
+                    self.choose_move()
+        else:
+            self.hilight(square)
+        self.refresh()
+
+    def hilight(self, square):
+        piece = self.chessboard.piece_at(square)
+        if piece is not None and (piece.color == self.chessboard.turn):
+            self.selected_square = square
+            self.hilighted = list(map(lambda m:m.to_square, filter(lambda m:m.from_square == square,self.chessboard.legal_moves)))
+
+    def draw_analyze_arrows(self,moves):
+        self.canvas.delete("analyze_arrow")
+        for i,move in enumerate(moves):
+            from_square = move.from_square
+            to_square = move.to_square
+            self.draw_arrow(from_square,to_square,analyze_arrow_color[i],analyze=True)
+
+    def draw_comment_arrows(self):
+        arrows = self.pgn.arrows()
+        for arrow in arrows:
+            from_square = arrow.tail
+            to_square = arrow.head
+            color = arrow.color
+            self.draw_arrow(from_square,to_square,comment_arrow_color.get(color))
+
+    def draw_variations_arrows(self):
+        for i,node in enumerate(self.pgn.variations):
+            m = node.move
+            from_square = m.from_square
+            to_square = m.to_square
+            self.draw_arrow(from_square,to_square,arrow_color[i%len(arrow_color)])
+
+    def draw_arrow(self,from_square,to_square,color,analyze=False,outline=False):
+        row1,col1=chess.square_rank(from_square),chess.square_file(from_square)
+        row2,col2=chess.square_rank(to_square),chess.square_file(to_square)
+        if self.flipped:
+            x1 = ((7-col1) * self.square_size)+self.square_size//2
+            y1 = ((row1) * self.square_size)+self.square_size//2
+            x2 = ((7-col2) * self.square_size)+self.square_size//2
+            y2 = ((row2) * self.square_size)+self.square_size//2
+        else:
+            x1 = ((col1) * self.square_size)+self.square_size//2
+            y1 = ((7-row1) * self.square_size)+self.square_size//2
+            x2 = ((col2) * self.square_size)+self.square_size//2
+            y2 = ((7-row2) * self.square_size)+self.square_size//2
+        if x2>x1: # Ajustements pour arriver avant le centre
+            x2-=self.square_size//8
+        elif x2<x1:
+            x2+=self.square_size//8
+        if y2>y1:
+            y2-=self.square_size//8
+        elif y2<y1:
+            y2+=self.square_size//8
+        if color is None:
+            color = "#AAAAAA"
+        tags = "analyze_arrow" if analyze else "arrow"
+        return (from_square,to_square),self.canvas.create_line(x1,y1,x2,y2,arrow=tk.LAST,width=self.square_size//5,arrowshape=(15,12,5),fill=color,tags=tags)
+
+    def redraw_pieces(self):
+        self.icons={}
+        self.canvas.delete("piece")
+        for square,piece in self.chessboard.piece_map().items():
+            x,y = chess.square_rank(square), chess.square_file(square)
+            if self.flipped:
+                x,y=7-x,7-y
+            filename = "img/%s%s.png" % (chess.COLOR_NAMES[piece.color], piece.symbol().lower())
+
+            if (filename not in self.icons):
+                self.icons[filename] = ImageTk.PhotoImage(Image.open(filename).resize((int(self.square_size),int(self.square_size))))
+
+            x0 = (y * self.square_size) + int(self.square_size/2)
+            y0 = ((7-x) * self.square_size) + int(self.square_size/2)
+            self.canvas.create_image(x0,y0, image=self.icons[filename], tags="piece", anchor="c")
+
+    def refresh(self, event={}):
+        if event:
+            xsize = (event.width-1) // 8
+            ysize = (event.height-1) // 8
+            self.square_size = min(xsize, ysize)
+
+        try:
+            cur_move=self.chessboard.peek()
+            from_square=cur_move.from_square
+            to_square=cur_move.to_square
+        except IndexError:
+            cur_move=None
+            
+        self.canvas.delete("square")
+        self.canvas.delete("arrow")
+        color = chess.WHITE
+        for row in range(8):
+            color = not color
+            for col in range(8):
+                cur_square = chess.square(col, row)
+                if self.flipped:
+                    x1=((7-col) * self.square_size)
+                    y1 = (row * self.square_size)
+                else:
+                    x1 = (col * self.square_size)
+                    y1 = ((7-row) * self.square_size)
+                x2 = x1 + self.square_size
+                y2 = y1 + self.square_size
+                if (self.selected_square is not None) and cur_square == self.selected_square:
+                    self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#D6CEFF" if color else "#B5A5FF", tags="square")
+                elif(self.hilighted !=[] and cur_square in self.hilighted):
+                    self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#FFFCA2" if color else "#CBCA82", tags="square")
+                else:
+                    if cur_move is not None and (cur_square == from_square or cur_square == to_square):
+                        self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#C8FFCE" if color else "#A0CBA5", tags="square")
+                    else:
+                        self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="white" if color else "grey", tags="square")
+                color = not(color)
+        self.redraw_pieces()
+        if not self.training:
+            self.draw_comment_arrows()
+            self.draw_variations_arrows()
+
+def init():
+    window = GUI()
+    window.new()
+    window.mainloop()
+
+if __name__ == '__main__':
+    init()

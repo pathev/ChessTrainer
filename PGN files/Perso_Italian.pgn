@@ -1,0 +1,12 @@
+[Event "Defense italienne: Tout"]
+[Site "lichess"]
+[Result "*"]
+[UTCDate "2021.05.25"]
+[UTCTime "07:41:10"]
+[Variant "Standard"]
+[ECO "C53"]
+[Opening "Italian Game: Classical Variation, Greco Gambit"]
+
+1. e4 e5 2. Nf3 Nc6 { [%cal Gf1c4,Gd2d4] } 3. Bc4 (3. d4 exd4 4. Nxd4 Nf6 5. Nc3 { [%cal Gf8b4,Gf6e4] } 5... Bb4 (5... Nxe4 6. Nxe4 Qe7 7. f3 d5 8. Bb5 Bd7 9. Bxc6 bxc6 10. O-O dxe4 11. Re1 O-O-O 12. Rxe4) 6. Nxc6 bxc6 7. Bd3 O-O) 3... Bc5 { [%cal Gd2d3,Gc2c3,Gd2d4,Ge1g1] } 4. c3 (4. d3 Nf6 { [%cal Ge1g1,Gc1g5] } 5. Bg5 (5. O-O a5 6. Bg5 d6 { [%cal Gb1d2,Gb1c3] } 7. Nc3 (7. Nbd2 h6 { [%cal Gg5e3,Gg5h4,Gg5f6] } 8. Be3 (8. Bh4 g5 9. Bg3 Qe7 10. c3 O-O)  (8. Bxf6 Qxf6 9. Bb5 O-O 10. Bxc6 bxc6) 8... Bxe3 9. fxe3 { [%cal Gc6e7,Ge8g8,Ga5a4] } 9... O-O (9... Ne7)  (9... a4)) 7... h6 { [%cal Gg5e3,Gg5f6] } 8. Bxf6 (8. Be3 Nd4 9. h3 O-O { [%cal Ge3d4,Ga2a4] } 10. a4 (10. Bxd4 Bxd4 11. Nxd4 exd4 { [%cal Gc3e2,Gc3b5] } 12. Ne2 { [%cal Gd6d5,Gc7c5] } 12... d5 (12... c5) 13. exd5 Nxd5)) 8... Qxf6 9. Nd5 Qd8 { [%cal Gd5e3,Gc2c3] } 10. Ne3) 5... a6 6. Nc3 h6 7. Bxf6 Qxf6 8. Nd5 Qd8 9. c3 { [%cal Gc5a7,Gd7d6] } 9... Ba7 (9... d6 10. b4 Ba7 { [%cal Gd5e3,Ga2a4] } 11. Ne3 (11. a4)) 10. d4 O-O 11. Nxe5 { [%cal Gb7b5,Gc6e5] } 11... b5 (11... Nxe5 12. dxe5 { [%cal Gc7c6,Gb7b5,Gd7d6] } 12... c6 (12... b5)  (12... d6)) 12. Bb3 Nxe5 13. dxe5 c6 14. Nf4)  (4. d4 Bxd4 5. Nxd4 Nxd4 6. Be3 Nc6 7. Qh5 Qe7 8. Nc3 Nf6 9. Qh4 d6 10. Bg5 Be6)  (4. O-O d6 { [%cal Gc2c3,Gd2d3,Gf1e1] } 5. c3 (5. Re1 Bb6 { [%cal Ga2a4,Gc2c3,Gd2d3] } 6. a4 (6. c3 Nf6 7. d3)  (6. d3 h6) 6... Nf6) 5... Nf6 { [%cal Gf1e1,Gb2b4] } 6. b4 Bb6 7. a4 a6 { [%cal Ga4a5,Gd2d3] } 8. a5 (8. d3 h6) 8... Ba7) 4... Nf6 { [%cal Gd2d3,Gd2d4] } 5. d4 (5. d3 a5 6. O-O O-O 7. h3 Ba7 8. Bg5 d6) 5... exd4 { [%cal Ge4e5,Gc3d4] } 6. e5 (6. cxd4 Bb4+ { [%cal Gb1d2,Gc1d2] } 7. Nbd2 (7. Bd2 Nxe4 8. Bxb4 Nxb4 9. Bxf7+ Kxf7 10. Qb3+ Ke8 11. Qxb4 Qe7 12. Qxe7+ Kxe7 13. O-O Nf6 14. Nc3 d6) 7... Bxd2+ 8. Bxd2 Nxe4 9. d5 Ne7 10. Bc1 d6 11. O-O O-O 12. Re1 Nf6 13. Bg5 Ng6 14. h3 h6 15. Bd2 Bd7 16. Bc3 b5 17. Bb3 a5 18. Qd2 b4 19. Bd4) 6... d5 7. Be2 Ne4 8. cxd4 Bb6 9. O-O Be6 10. Nc3 f6 { [%cal Ge2d3,Ge2b5,Ge5f6] } 11. Bd3 (11. Bb5 O-O)  (11. exf6 Qxf6 12. Bb5 O-O) *
+
+

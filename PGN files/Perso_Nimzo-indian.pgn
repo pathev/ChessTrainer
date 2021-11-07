@@ -1,0 +1,349 @@
+[Event "Nimzo-indienne: Introduction"]
+[Site "https://lichess.org/"]
+[Result "*"]
+[UTCDate "2021.01.04"]
+[UTCTime "14:36:26"]
+[Variant "Standard"]
+[ECO "E20"]
+[Opening "Nimzo-Indian Defense"]
+
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 *
+
+
+[Event "Nimzo-indienne: Entraînement avec l'ordinateur"]
+[Site "https://lichess.org/study/QIVtiBVE/UNJlqC9I"]
+[Result "*"]
+[UTCDate "2021.03.04"]
+[UTCTime "07:50:16"]
+[Variant "Standard"]
+[ECO "E49"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Botvinnik System"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 (4. Qc2 O-O 5. Nf3 (5. e3 c5 6. dxc5 Bxc5 7. Nf3 d5 8. a3 dxc4 9. Bxc4 Nbd7 10. O-O a6) 5... c5 6. dxc5 Bxc5 7. Bg5 h6 8. Bh4 Nc6 9. e3 Be7 10. Be2 Nb4 11. Qb3) 4... O-O 5. Bd3 d5 6. a3 Bxc3+ 7. bxc3 Nc6 (7... b6 8. Ne2 c5 9. cxd5 exd5 10. O-O) 8. Nf3 Re8 9. cxd5 exd5 10. O-O *
+
+
+[Event "Nimzo-indienne: Sämisch 4.a3 ou 4.f3 Part. 1"]
+[Site "https://lichess.org/study/QIVtiBVE/o3NJQbNN"]
+[Result "*"]
+[UTCDate "2021.01.04"]
+[UTCTime "14:37:40"]
+[Variant "Standard"]
+[ECO "E24"]
+[Opening "Nimzo-Indian Defense: Sämisch Variation, Accelerated"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. a3 Bxc3+ 5. bxc3 { Il s'agit là d’attaquer le pion faible c4 } 5... b6 6. f3 Nc6 7. e4 Ba6 8. Bg5 (8. Bd3 Na5 9. Qe2 { contrôle des cases b3 et a4 perdu par la Dame } 9... Nb3 10. Rb1 Nxc1 11. Rxc1 Nh5 { De7 à suivre } { [%cal Gd8e7] })  (8. e5 Ng8 9. Nh3 Na5 10. Qa4 { Les noirs cherchent l’échange des dames } { [%cal Gd8c8,Gc8b7,Gb7c6,Gd8e8,Ge8c6] } 10... Ne7 11. Bd3 (11. Bg5 O-O 12. Bd3 Qe8 { [%cal Rh7h6,Gd7d6,Gd7d5] })  (11. Ng5 h6 12. Ne4 O-O 13. Bf4 Qe8) 11... h6 12. Nf4 O-O 13. O-O d6 14. Rd1 Qe8 15. Qc2 Bxc4) 8... Na5 { Ne pouvant défendre c4, les blancs doivent attaquer } (8... Qc8?! { Le coup de la partie, mais mauvais } 9. Bd3 Na5 10. Qe2 d6 11. Nh3 Nd7 12. f4 f6 13. Bh4 Qb7 14. O-O O-O-O 15. Rab1 Rhe8)  (8... h6 9. Bh4 g5 10. Bf2) 9. e5 h6 10. Bh4 g5 11. Bf2 Nh5 12. h4 f5 13. exf6 (13. c5 Bxf1 14. Kxf1 Qc8 { [%cal Gc8a6] })  (13. hxg5 Qxg5 14. Nh3 Qg6 15. g4 fxg4 16. Bd3 Qf7 17. fxg4 Nf4)  (13. g3 f4 14. hxg5 Qxg5 15. Nh3 Qg8 16. gxf4 Bxc4) 13... Qxf6 14. c5 Bxf1 15. Kxf1 g4 16. Qd3 O-O *
+
+
+[Event "Nimzo-indienne: Sämisch 4.a3 ou 4.f3 Part. 2"]
+[Site "https://lichess.org/study/QIVtiBVE/j8gCDr5R"]
+[Result "*"]
+[UTCDate "2021.01.04"]
+[UTCTime "15:20:56"]
+[Variant "Standard"]
+[ECO "E20"]
+[Opening "Nimzo-Indian Defense: Kmoch Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. f3 Nc6 { On laisse temporairement le centre aux blancs } 5. e4 (5. a3 Bxc3+ 6. bxc3 b6 { Transposition dans la partie précédente : https://lichess.org/study/QIVtiBVE/o3NJQbNN#11 }) 5... d5 { Il faut tout de même attaquer le centre } 6. cxd5 exd5 7. e5 Ng8 8. f4 Nh6 { Le cavalier prépare un blocus en f5 ou une attaque sur e3 après un Fe3 } { [%cal Gh6f5,Gh6g4] } 9. Be2 (9. Nf3 Bg4 10. Be3 Nf5 11. Bf2 Bxf3 { Assure la case f3 au cavalier } 12. gxf3 (12. Qxf3 Nfxd4 { gagne un pion }) 12... O-O 13. Rg1 (13. Qd3 Nce7 14. Bh3 g6 15. Rg1 Kh8 { Le fou f2 est paralysé }) 13... Ncxd4 14. Bxd4 Qh4+ 15. Bf2 Qxf4) 9... Nf5 10. Nf3 Ba5 { Les blancs doivent bouger le fou e2. Sinon, risques d'attaque avec Dh4+ ou clouage par Fb5, avec perte du pion d4. } 11. Bb5 O-O 12. a3?! (12. Bxc6 bxc6 13. Qa4 Bb6 14. Qxc6 Rb8 15. Qxd5 Nxd4 16. Nxd4 Bxd4 17. Qxd8 Rxd8 18. Ne2 Bc5) 12... Bb6 13. Bxc6 bxc6 14. Qd3 f6 { contestation du centre } 15. Be3 fxe5 16. Nxe5 Ba6! 17. Qd2 Nxe3 18. Qxe3 c5! *
+
+
+[Event "Nimzo-indienne: Sämisch 4.a3 ou 4.f3 Part. 3 (→8)"]
+[Site "https://lichess.org/study/QIVtiBVE/CbSuMgpt"]
+[Result "*"]
+[UTCDate "2021.01.06"]
+[UTCTime "15:50:15"]
+[Variant "Standard"]
+[ECO "E20"]
+[Opening "Nimzo-Indian Defense: Kmoch Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. f3 O-O { Les noirs attendent e4 avant de frapper avec d5 pour exploiter davantage le développement } 5. a3 (5. e4 d5 { Meilleur pour les noirs que dans la partie précédente } 6. e5 (6. cxd5 exd5 7. e5 Nfd7 8. a3 (8. f4 c5 { On explose le centre, et on peut sacrifier pour ouvrir les lignes sur le roi au centre } 9. a3 (9. Nf3 cxd4 10. Qxd4 (10. Nxd4 Nxe5! 11. fxe5 Qh4+ 12. Ke2 Bc5) 10... Nc6 11. Qxd5 Ndxe5! 12. Qxd8 Nxf3+ 13. gxf3 Rxd8 14. Be3) 9... Ba5 10. Nf3 cxd4 11. Nxd4 Nxe5! { sacrifice typique } 12. fxe5 Qh4+ 13. Ke2 Bb6 14. Be3 Bg4+ 15. Nf3 d4 16. Bxd4 Bxf3+ 17. Kxf3 Bxd4 $19) 8... Bxc3+ 9. bxc3 f6 { Le centre blanc s’évanouit } 10. f4? (10. exf6 Qxf6 (10... Qe8+ 11. Qe2 Qf7 12. Qd1 Qe6+ 13. Be2 Nxf6) 11. Bd3 Nb6 12. Ne2 Bf5 { égalité après l’échange des fous } { [%cal Gd3f5,Rf6f5] }) 10... fxe5 11. dxe5 Nxe5! { sacrifice typique } 12. fxe5?? Qh4+ 13. Kd2 Qf4+ 14. Kc2 Qxf1) 6... Nfd7 7. a3 Bxc3+ 8. bxc3 dxc4 9. Bxc4?? Nxe5 10. Bb3 Nec6) 5... Bxc3+ 6. bxc3 Nh5 { Ce coup gagne du temps pour permettre f5 et plus tard Dh4! } { [%cal Gd7d6,Ge6e5,Gb8c6,Gc8d7] } (6... Ne8 { Manœuvre de Capablanca. On évite le clouage } { [%cal Gb7b6,Gc8a6,Gb8c6,Gc6a5,Ge8d6] }) 7. Nh3 { évite l’échec Dh4+ } (7. e4? Qh4+ 8. g3 Nxg3 9. hxg3 Qxh1 $19) 7... f5 8. e3 (8. Bg5 Nf6) *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 d5!? Part. 4 (→16)"]
+[Site "https://lichess.org/study/QIVtiBVE/nuuteVwF"]
+[Result "*"]
+[UTCDate "2021.01.12"]
+[UTCTime "06:55:58"]
+[Variant "Standard"]
+[ECO "E37"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Noa Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 { Les blancs veulent la paire de fous sans détériorer la structure de pions.
+La faiblesse est alors la dame exposée et un retard de développement.
+Pour les noirs il s'agit de donner priorité à l'activité, y compris en détruisant la structure de pions ou en sacrifiant un pion. } 4... d5 5. a3 (5. Bg5 dxc4 6. e3 (6. Nf3 b5 { [%cal Gc7c6] }) 6... b5 { [%cal Gc7c6] })  (5. cxd5 { Voir Partie 5 https://lichess.org/study/QIVtiBVE/M1B1QsRi#9 }) 5... Bxc3+ 6. Qxc3 { Il faut maintenant pour les noirs nécessairement être agressifs sans quoi les blancs rattraperont leur retard de développement et la paire de fous sera déterminante.
+Les noirs ouvrent le centre et s'activent au maximum. Il peut se tenter un échange de fous (partie 5). } 6... Ne4 7. Qc2 c5! { e5 et Ff5 sont dans l'esprit du jeu à adopter par les noirs pour contrer la paire de fous des blancs. } (7... Nc6 8. e3 e5 9. f3 Nf6 10. dxe5 Nxe5 11. cxd5 Qxd5 12. e4 { Position à éviter pour les noirs : plus d'avant poste pour les cavaliers, plus de rupture active. })  (7... e5 { Des pertes matérielles à venir pour les noirs, mais avec des compensations suffisantes dans la plupart des cas } { [%cal Gc8f5] } 8. cxd5 Bf5 9. g4 Bg6 10. Qb3 exd4 11. Nf3 O-O 12. Bg2 d3!) 8. dxc5 (8. e3? cxd4 9. exd4 Nc6 10. Nf3 Qa5+) 8... Nc6 9. cxd5 (9. Nf3 Qa5+ 10. Bd2 Qxc5 11. e3 Nxd2 12. Qxd2 dxc4 $10)  (9. e3 Qa5+ 10. Bd2 Nxd2 11. Qxd2 dxc4 12. Qxa5 Nxa5 13. Rc1 b5 { Donne un pion, mais une fois les lignes ouvertes, les pions à l'aile dame se feront capturer. } 14. cxb6 Bb7 15. Nf3 Ke7 16. bxa7 { Plan : éliminer le cavalier f3 et exercer une pression constante sur les pions le long de la colonne b. }) 9... exd5 10. Nf3 Qf6!? { Empêche b4 et le développement actif du fou de case noir } (10... Bf5!? { Les parties récentes sont en faveur des blancs }) 11. e3 Bg4 12. Be2 O-O 13. O-O { Naturel mais imprécis } (13. Bd2 { Les noirs doivent faire pression sur la colonne c } 13... Rac8 14. O-O b6 { Avec du contre-jeu }) 13... Rfe8 14. Bd2 d4! 15. Rad1 Nxd2 16. Qxd2 Rad8 { Le sacrifice de pion a permis une pression sur les colonnes centrales et des pièces plus actives } *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 d5!? Part. 5 (→18)"]
+[Site "https://lichess.org/study/QIVtiBVE/M1B1QsRi"]
+[Result "*"]
+[UTCDate "2021.01.18"]
+[UTCTime "12:40:54"]
+[Variant "Standard"]
+[ECO "E35"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Noa Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 d5 5. cxd5 exd5 (5... Qxd5 { Variante majeure non vue ici }) 6. Bg5 c5 (6... h6 { N'est pas une très bonne idée, la seule perspective pour les noirs revient à neutraliser l'attaque sur l'aile dame. } 7. Bxf6 Qxf6 8. a3 Bxc3+ 9. Qxc3) 7. dxc5 (7. a3 { Voir Partie 6 }) 7... h6 8. Bh4 (8. Bxf6 Qxf6 { Les blancs concèdent la paire de fous, les noirs ont moins de mal à égaliser. On gagne une pression sur la colonne c }) 8... g5 { Le cavalier f6 est nécessaire pour la pression sur le cavalier c3. L'aile roi est affaiblie mais l'avance est nécessaire pour se déclouer.
+Noter que d4 est mauvais car les blancs se déclouent par O-O-O et le pion d4 se retrouve cloué. } { [%cal Rd5d4] } (8... Nc6?! 9. e3 g5 10. Bg3 Ne4 11. a3 Qa5 12. Ne2 Bf5 13. Qc1! Nxc5 14. axb4 Nd3+ 15. Kd2 Qxb4 (15... Nxc1? 16. Rxa5) 16. Ra4 Nxc1 (16... Qb3? 17. Qb1) 17. Rxb4 Nxe2 18. Rxb7 Nxg3 19. hxg3 d4 20. exd4 Nxd4 21. Nd5 { Les noirs souffrent }) 9. Bg3 Ne4 10. e3 { il faut mettre en jeu les pièces de l'aile roi } (10. Bxb8 { Si les blancs cherchent à simplifier... } 10... Rxb8? (10... Qf6 11. Bg3?! (11. Nf3 { les blancs cherchent à résoudre leur problème de développement } 11... Bxc3+ 12. bxc3 Rxb8 13. e3 (13. Qa4+?? Ke7 14. Qxa7 Qxc3+) 13... O-O 14. Bd3 Nxc5 15. O-O Bd7 { Les deux camps ont des faiblesses }) 11... Nxc3 12. a3 Bf5 13. Qd2 Ba5 14. b4? Ne4 15. Qc1 Rc8!!) 11. Qa4+ { coûte une pièce ! }) 10... Qa5 { On met une pression constante sur le cavalier c3 } (10... Nc6?! 11. a3 { On retrouve la variante vue vers le coup 8 des noirs }) 11. Ne2 (11. Be5 O-O 12. Bd3 { mais... } 12... Nc6 13. Bxe4 Nxe5 14. Bxd5 (14. Bh7+ Kg7 15. Bd3 d4 16. exd4 Bxc3+ 17. bxc3 Nxd3+ 18. Qxd3 Bf5! 19. Qc4 Rfe8+) 14... Bg4 15. Nf3 Bxf3 16. Bxf3 Nxf3+ 17. gxf3 Rac8 { les noirs gagneront le pion et ont une bonne finale }) 11... Bf5! (11... Nc6? { toujours pas bon } { [%cal Rg3e5] } 12. a3!) 12. Be5 (12. Bxb8 Rxb8 13. Nd4 Bd7 14. Nb3 Bxc3+ 15. bxc3 Qxc3+ 16. Qxc3 Nxc3 17. f3 Ke7 { La pression des noirs sur c3 compense les faiblesses sur l'aile roi et le pion dame isolé } { [%cal Gc3a4,Gb8c8] }) 12... O-O! 13. Nd4 Re8 14. Bxb8 (14. Nxf5 Rxe5 15. Nxh6+ Kg7 16. Ng4 { ne donne pas d'avantage } 16... Re6 { défend l'aile roi }) 14... Nxc3! (14... Bg6?! 15. Bd3 Raxb8 16. O-O { Les blancs peuvent retourner à l'attaque }) 15. Nxf5 Ne4+ 16. Ke2 { [%cal Gf2f3,Ge2f2] } (16. Kd1 Raxb8 17. f3 Nf6 18. Nxh6+ Kf8 { les blancs essaient de pénétrer à l'aile roi, mais les noirs sont plus actifs } { [%cal Gb8c8,Gc8c5] }) 16... Qa6+!? 17. Kd1 Qf6 18. f3? (18. g4! Raxb8 19. h4) *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 d5!? Part. 6"]
+[Site "https://lichess.org/study/QIVtiBVE/UYZVTZm5"]
+[Result "*"]
+[UTCDate "2021.01.24"]
+[UTCTime "14:48:13"]
+[Variant "Standard"]
+[ECO "E35"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Noa Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 d5 5. cxd5 exd5 6. Bg5 c5 7. a3 { What else (en dehors de dxc5) ? } (7. O-O-O Bxc3 8. Qxc3 cxd4 9. Bxf6 dxc3 10. Bxd8 cxb2+ 11. Kxb2 Kxd8 { Les noirs sont bien : aucune faiblesse et une majorité de pions à l’aile dame })  (7. Nf3 cxd4 (7... h6 8. Bxf6 Qxf6 9. a3 (9. O-O-O?! Bxc3 10. Qxc3 c4 11. e4 O-O! 12. exd5 b5! { L’attaque noire sur l'aile dame arrive en premier })  (9. dxc5 O-O 10. e3 Be6 11. Rc1 Nc6 12. Bb5 Rac8 13. O-O Bxc5 { paire de fous conservée, bon développement }) 9... Bxc3+ 10. Qxc3 Nd7 11. e3 O-O 12. Bb5 c4 13. Bxd7 Bxd7 14. Ne5 Bf5 15. b3 b5 16. O-O a5 17. bxc4 bxc4 { pion passé donnant un léger avantage aux noirs }) 8. Nxd4 Nc6 9. Nxc6 bxc6) 7... Bxc3+ 8. Qxc3 { seul coup raisonnable pour les blancs qui gardent une bonne structure de blanc contre un développement moins avancé } (8. bxc3!? Nbd7 { [%cal Gd8a5,Gf6e4] } 9. e3 Qa5 10. Bd3 c4 11. Bf5 Nc5 12. Bxc8 Nd3+ 13. Ke2 Rxc8 14. Bxf6 gxf6 { le cavalier noir compense la structure de pions... }) 8... cxd4!? (8... c4!? 9. Nf3 O-O { En attente pour le développement sur l'aile dame } 10. g3 (10. e3 Nc6 { [%cal Gc8f5,Gb7b5,Ga7a5] }) 10... Nbd7 { [%cal Gh7h6,Gg5f6,Gd7f6,Gc8f5] }) 9. Qxd4 Nc6 10. Qf4 (10. Bxf6?? { perd du matériel } 10... Nxd4 11. Bxd8 Nc2+ 12. Kd1 Nxa1) 10... d4 (10... Be6 11. Nf3 d4 { Obligatoire pour prendre de l’espace et empêcher e3. 12.b4 Dd5 } 12. b4 Qd5! { idée efficace contre l'avancée du pion en b4 } { [%cal Gd5b3] } 13. Bxf6 gxf6 14. g3 (14. Qxf6 Qb3 15. Qxh8+? Ke7 16. Qxa8 (16. Qxh7 Qc3+ 17. Nd2 Qxa1+ 18. Qb1 Qxa3) 16... Qc3+ 17. Nd2 Qxa1+ 18. Nb1 Qxb1+ 19. Kd2 Qb2+ 20. Kd3 Qb3+ 21. Ke4 Qc2+ 22. Kf4 Qf5+ 23. Kg3 Qg4#) 14... Qb3 15. Qd2 O-O-O 16. Bg2 d3! { les noirs sont à l’initiative }) 11. Bxf6 (11. b4 Qd5 (11... Nd5 { simplification } 12. Bxd8 Nxf4 13. Bc7 Ne6 14. Bd6 f6 15. Nf3 Kf7 16. e3 Rd8 17. Bg3 dxe3 (17... b6?!) 18. fxe3 a5 19. b5 Ne7 20. Bc4 Nf5) 12. Bxf6 gxf6 13. Qxf6 Qc4! 14. Qxh8+ Ke7 { perpétuelle inévitable }) 11... gxf6 12. Nf3 (12. b4 Be6 13. Nf3 Qd5 14. Qxf6 Qb3!) 12... Qa5+!? (12... Be6 { En attente du choix des blancs } 13. b4 (13. g3 Qa5+ { [%cal Gf4d2,Ga5d2,Ge1d2,Ge8c8] }) 13... Qd5) 13. Qd2 Qxd2+ 14. Kxd2 { Structure de pions noirs catastrophique mais dynamisme des pièces avec contre-jeu. } 14... Bf5 { [%cal Gd4d3] } (14... Be6 { envisageable }) 15. b4 { à présent, les noirs vont roquer et centraliser les tours. Sinon on peut faire a5 } { [%cal Rc6a5,Ra5b3,Gd4d3] } 15... O-O-O 16. Rc1 Kb8 17. g3 a5!? (17... Rhe8 { Un autre plan } { [%cal Gc6e5,Gd8d5,Gd5f5] }) 18. Bg2!? (18. b5 Na7 { [%cal Ga7c8,Gc8d6,Gc8b6] } (18... Ne5 { [%cal Ge5g4] })) 18... Be4 { Il faut absolument limiter l’action du fou g2 } 19. Nh4 Bxg2 20. Nxg2 axb4 21. axb4 Nxb4 22. Rc4 { les blancs rattrapent le retard de développement par cette attaque } 22... Nc6 23. Rb1 Ne5 24. Rcb4 Rd7 25. Nf4 Rc8 26. Ra4 { [%cal Gb1b4] } 26... Nc4+ $10 { Répétitions qui font nul } { [%cal Gd2d3,Gc4e5,Ge5c4,Gd3d2] } *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 O-O Part. 7 (→27)"]
+[Site "https://lichess.org/study/QIVtiBVE/uUo290oN"]
+[Result "*"]
+[UTCDate "2021.01.29"]
+[UTCTime "13:45:27"]
+[Variant "Standard"]
+[ECO "E32"]
+[Opening "Nimzo-Indian Defense: Classical Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+{ Version plus calme que la précédente.
+On veut faire pression sur la colonne c et contrôler e4. } { [%cal Gb7b6,Gc8b7,Gd7d6,Gb8d7,Gc7c5] }
+4. Qc2 O-O { Noir attend l'intention des blancs avant de se développer en conséquence. } 5. e4 (5. Nf3 c5 6. dxc5 Na6 { Et on prend le contrôle de e4 } { [%cal Ga6c5,Gb7b6,Gc8b7,Gc5e4,Ga8c8] }) 5... d5 6. e5 Ne4 { Note : si le fou blanc des blancs s’échange contre le cavalier e4, les noirs ont un excellent jeu sur les cases blanches. } 7. Bd3 (7. f3? Qh4+ 8. g3 Nxg3 9. Qf2 Nf5)  (7. a3 Bxc3+ 8. bxc3 c5 { [%cal Gd8a5] } 9. Bd3 (9. Bb2 cxd4 10. cxd4 Bd7! (10... Qa5+?! 11. Ke2 { [%cal Gf2f3] }) 11. Bd3 (11. f3 Qh4+) 11... Qa5+ 12. Ke2) 9... Qa5) 7... c5 8. Ne2 (8. dxc5 Nd7! { pion regagné avec meilleur développement })  (8. cxd5 exd5 9. Ne2 cxd4 (9... Nc6 10. O-O cxd4 (10... Bf5)) 10. Nxd4 Nd7 { possible de retrouver la partie principale }) 8... Nc6 9. cxd5 exd5 10. O-O cxd4! (10... Nxd4 { moins bon } 11. Nxd4 cxd4 12. Nxe4 dxe4 13. Bxe4 { Les blancs font pression sur les deux ailes }) 11. Nxd5 (11. Nxe4?! dxe4 12. Bxe4 Nxe5 13. Bxh7+ Kh8 { [%csl Rh7,Gd4] } 14. Bd3 Bg4) 11... Qxd5 12. Bxe4 Qxe5 13. a3 { Dame centralisée et pion passé donnent peu de liberté aux blancs } (13. Bxh7+ Kh8 14. Be4 Re8 15. Ng3 Be6 16. Bd3) 13... Ba5 14. Bxh7+ Kh8 15. Bd3 Bg4 { Typique. On provoque un affaiblissement de la diagonale a7-b1 } (15... Be6 16. f4 { gain de temps des blancs pour l'attaque sur l'aile roi } { [%cal Gf4f5] }) 16. f3 Bd7 17. Bf4 Qf6 18. Qc5 { Ce coup est une justification du coup a3 } 18... Kg8 19. Qh5 g6 20. Bg5 Qe5 21. Qh6 Bd8 { Il faut réduire la pression } 22. Bxd8 (22. Bf4 Qg7 23. Qxg7+ Kxg7) 22... Raxd8 23. Rad1 Bf5 (23... Rfe8!?) 24. Bxf5 Qxf5 25. f4 (25. Ng3 Qf6 26. Ne4 Qh8 27. Qg5 Qe5 { l'attaque noire échoue }) 25... Rfe8 26. Ng3 Qf6 27. f5 Qg7 28. Qc1 d3 29. fxg6 Qxg6 30. Kh1 Re5 31. Qf4 Rdd5 32. Rd2 Qe6 33. h3 Re1 34. Rxe1 Qxe1+ 35. Kh2 Qe6 36. Ne4 Kf8 37. Ng3 Qe5 *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 O-O Part. 8 (→24)"]
+[Site "https://lichess.org/study/QIVtiBVE/KusweT7e"]
+[Result "*"]
+[UTCDate "2021.02.24"]
+[UTCTime "13:52:37"]
+[Variant "Standard"]
+[ECO "E32"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Keres Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 O-O 5. a3 Bxc3+ 6. Qxc3 b6 { [%csl Ge4][%cal Gc8b7,Gc8a6,Rc4c5] } 7. Nf3 Bb7 8. e3 { Les blancs cherchent à ouvrir la position et profiter de leur paire de fous.
+Les noirs :
+1. développent, mettent leurs pions sur case noire (d6,Cbd7,c5), mais ceci est passif
+2. cherchent à ouvrir le jeu avec c5, au risque de la faiblesse positionnelle
+3. (la partie présente) utilisent e4 comme tremplin pour une attaque contre le roque } { [%cal Gf1e2,Ge1g1,Gb2b4,Gb2b3,Gc1b2,Gd7d6,Gb8d7,Gf6e4,Gf7f5,Gd8h4,Gd8f6,Gf8f6,Gf6h6] } 8... d6 9. Be2 (9. b4 Nbd7 10. Bb2 Ne4 11. Qc2 f5 12. Bd3 Ng5?! (12... Qe8?! 13. O-O Qh5 14. d5 { le pion c7 tombe si on prend en d5 })  (12... c5!? { Attend la position du roi noir pour le roque } 13. O-O Ng5 { [%cal Rf3d2,Rf3e1,Rc5d4] } 14. Nxg5 (14. Nd2 cxd4 15. exd4! Nh3+!! 16. Kh1 Nf4) 14... Qxg5 15. f4 Qg6 { [%csl Ge4][%cal Gb7g2] }) 13. d5 { [%cal Gd3f5] } 13... Nxf3+ 14. gxf3 Ne5 15. O-O-O { [%cal Gg1g7] })  (9. Bd3 Nbd7 10. O-O c5 11. b4 cxd4 12. exd4 (12. Nxd4 Ne5 13. Be2 Rc8) 12... Bxf3 13. gxf3) 9... Nbd7 10. O-O Ne4 11. Qc2 f5 { Position hollandaise } { [%cal Gd4d5] } 12. b4 (12. Ne1 Qh4 13. f3 Ng5 { [%cal Gf8f6,Gf6h6] })  (12. Nd2 Qg5 { le cavalier d2 masque le fou c1 } 13. d5 { Sacrifice typique ; indiqué pour limiter l'initiative noire.
+Les noirs doivent maintenir le fou de cases blanches vivant } { [%cal Re6e5] } 13... exd5 14. cxd5 Bxd5 15. Bc4 Nef6 16. Nf3 Qg4) 12... Rf6 { début du plan d'attaque thématique.
+Attaquer le roque, et ne pas chercher le contre-jeu sur l'aile dame. } { [%csl Gg2][%cal Gf6h6,Gf6g6,Gb7g2,Gg6g2] } 13. d5! { sacrifice temporaire, pour accélérer le développement et limiter les intention agressives des noirs. Ici les blancs restreignent l'action du fou b7. } (13. Bb2 { si les blancs ne coupent pas tout de suite le fou b7... } 13... Rh6 14. Rad1 Qe7 15. d5 c5 16. dxe6 (16. dxc6 Bxc6) 16... Qxe6) 13... Rg6 (13... exd5 14. Bb2 Rg6 15. cxd5 Bxd5 16. Bc4 { coup thématique : échange du fou noir actif } 16... Bxc4 17. Qxc4+ Kh8 18. Qd5 { [%cal Gd5f5] }) 14. Nd4 (14. Bb2 c5)  (14. dxe6 Nf8 { [%cal Gf8e6] }) 14... Qg5 15. g3 Ne5 { Seul coup valable pour les noirs... } 16. Nxe6 Rxe6 { sacrifice de qualité forcé ; ouvre la diagonale pour le fou } 17. dxe6 Qg6 { [%cal Ge4g5] } 18. Rd1 { prépare à rendre la qualité ; évacue f1 } 18... Ng5 19. Rd5 Ngf3+ 20. Bxf3 Nxf3+ 21. Kf1 Nxh2+ 22. Ke2 Qg4+ 23. Kd2 Nf3+ 24. Kc3 Bxd5 (24... b5 { Le coup de la partie, perdant. }) 25. cxd5 Ne1 *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 O-O Part. 9 (→22)"]
+[Site "https://lichess.org/study/QIVtiBVE/XIqqXox4"]
+[Result "*"]
+[UTCDate "2021.02.25"]
+[UTCTime "14:45:38"]
+[Variant "Standard"]
+[ECO "E32"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Keres Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 O-O 5. a3 Bxc3+ 6. Qxc3 b6 7. Bg5 { La suite la plus jouée } 7... Bb7 { [%cal Gd7d6,Gb8d7,Gc7c5] } 8. e3 { [%csl Ge4][%cal Gg1e2,Ge2c3,Gc3c2,Gc3d3,Ga1d1,Gd4d5] } 8... d6 9. Ne2 Nbd7 (9... c5 10. dxc5 dxc5 11. Qc2 h6 12. Bh4 Qe7 13. O-O-O Rd8 14. Rxd8+ Qxd8 15. Nc3 $14) 10. Qc2 { [%cal Re6e5] } (10. Qd3 Ba6 11. Nc3 d5 12. Qc2 Bxc4 13. Bxc4 dxc4 14. Qa4 c5 $10) 10... c5 11. Rd1 (11. Nc3 cxd4 { [%cal Gd8c7,Ga8c8,Gb7a6,Gd6d5] }) 11... Qc7 (11... cxd4 { La partie (perdante pour les noirs...) } 12. Rxd4 h6 13. Bh4 Ne5 14. Nc3 Rc8 15. Bg3 Qe7 16. Nb5 Nc6 (16... Rcd8 17. Nxa7 { [%cal Ga7b5] }) 17. Rd1 e5 18. Nxd6 Nd4 19. exd4 Qxd6 (19... exd4+?? 20. Qe2) 20. dxe5 Qe7 21. Be2 Ne4 22. Bf4) 12. Nc3 a6 13. Be2 (13. d5 exd5 14. cxd5 b5 15. Bd3 b4 16. axb4 cxb4 17. Ne2 Qxc2 18. Bxc2 Bxd5 19. O-O Rfc8 20. Nd4 a5)  (13. f3 cxd4 14. Rxd4 (14. exd4 d5) 14... d5 15. Be2 (15. Qd1 e5)  (15. cxd5 Nxd5 { [%cal Gd5c3,Gc7e5] }) 15... e5 16. Rh4 h6 { Les blancs perdent la paire de fous }) 13... h6 14. Bh4 Bxg2 15. Rg1 Bb7 16. d5 Rfe8 *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 O-O Part. 10 (→13)"]
+[Site "https://lichess.org/study/QIVtiBVE/m0gbq4H5"]
+[Result "*"]
+[UTCDate "2021.02.26"]
+[UTCTime "11:11:08"]
+[Variant "Standard"]
+[ECO "E32"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Keres Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 O-O 5. a3 Bxc3+ 6. Qxc3 b6 7. Bg5 Bb7 8. Nf3 { [%cal Gf3d2,Gf2f3,Ge2e3,Ge2e4,Gf1e2,Ge1g1] } (8. e3 d6 9. f3 Nbd7 { [%cal Gg1h3,Gf1e2,Ge1g1,Gc7c5,Gd4c5,Gb6c5] } 10. Bd3 { [%cal Gg1e2] } (10. Nh3 h6 11. Bh4 c5 12. dxc5 bxc5 13. Be2 (13. O-O-O Qb6 { [%cal Gd6d5,Ga8b8] } (13... Ne5? 14. Qe1)) 13... a5 14. O-O a4 15. Rad1 Ra6 { [%cal Gd6d5,Ge6e5] }) 10... h6 11. Bh4 c5 12. Ne2 (12. dxc5 Nxc5 13. Bc2 Rc8 { [%cal Gc8c4,Gc5d7,Gd6d5] } 14. Bxf6 Qxf6 15. Qxf6 gxf6 $15 { [%cal Gd6d5,Gg8e7] }) 12... Rc8 { [%cal Gc5d4,Gd6d5,Gb7a6] }) 8... d6 9. Nd2 (9. e3 Nbd7 10. Be2 Qe8 { [%cal Gf6e4,Gf7f5] }) 9... c5!? (9... Nbd7 { Ligne habituelle } 10. f3 (10. e3 Rc8 11. f3 c5 12. dxc5 Rxc5 13. Bh4 b5 { [%cal Gc5c1] }) 10... d5 (10... c5!? 11. e4 (11. dxc5 bxc5) 11... Re8 12. Bd3 (12. Be2 Nd5! $10) 12... cxd4 13. Qxd4 Nc5 14. Bc2 e5 $10 { Recherche du contrôle des cases noires }) 11. cxd5 exd5 { [%cal Gf8e8,Gd8e7] } 12. e3 Re8 13. Be2 Rc8 14. O-O Qe7 15. Bb5 c6 16. Ba4 h6 17. Bxf6 Nxf6 18. Rfe1 $14 { [%cal Gb2b4,Ga1c1,Ge3e4] }) 10. dxc5 (10. f3 h6 11. Bh4 cxd4 12. Qxd4 Nc6 13. Qc3 Ne5 { [%cal Ga8c8] } (13... e5 { [%cal Ga8c8,Gd6d5] }))  (10. e3 Nbd7 11. f3 Rc8) 10... bxc5 11. e3 (11. Bxf6 Qxf6 12. Qxf6 gxf6 { [%csl Gd6][%cal Gg8e7] }) 11... Nbd7 12. Bd3 a5 { [%cal Gf8b8,Ga8a6,Ga6b6,Gb8b2,Rb2b4] } 13. O-O a4 { Le plus précis pour empêcher le plan blanc de blocage de la colonne b par le cavalier } { [%cal Rb2b3,Ra3a4,Rd2b1,Rb1a3,Ra3b5] } (13... Ra6 { Le coup de la partie }) 14. Rad1 Ra6 *
+
+
+[Event "Nimzo-indienne: Capablanca 4.Dc2 O-O Part. 11 (→19)"]
+[Site "https://lichess.org/study/QIVtiBVE/TqklagO8"]
+[Result "*"]
+[UTCDate "2021.02.27"]
+[UTCTime "12:31:59"]
+[Variant "Standard"]
+[ECO "E32"]
+[Opening "Nimzo-Indian Defense: Classical Variation, Keres Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. Qc2 O-O 5. a3 Bxc3+ 6. Qxc3 b6 7. Bg5 Bb7 8. f3 h6 { [%cal Gd7d5,Gf6d5,Rc3d2] } 9. Bh4 d5 10. e3 (10. cxd5 exd5 (10... Nxd5? 11. Bxd8 Nxc3 12. Bxc7 Nd5 { On a perdu un pion }) 11. e3 Re8 { [%cal Ge8e3,Rf1d3,Rg1e2] } 12. Nh3 (12. Bf2 c5 13. Bb5 cxd4 14. Qxd4 Nc6 15. Bxc6 Bxc6 16. Ne2 Bb5 { Les blancs ont du mal à roquer })  (12. Bb5 c6 13. Ba4 Ne4!? { profite de la position du fou en a4 } 14. Bxd8 Nxc3 15. bxc3 Rxd8 $10 { les blancs ont perdu la paire de fous }) 12... Qe7 13. Bf2 c5 14. Bb5 Bc6 15. Be2 (15. Bxc6 Nxc6 16. O-O Rac8 { pièces blanches passives }) 15... Bd7 { Cavalier mal placé en h3 } { [%csl Rh3] }) 10... Nbd7 11. cxd5 (11. Bd3 c5 12. cxd5 cxd4 13. Qxd4 (13. exd4 Rc8 14. Qd2 Bxd5 $10 { [%csl Rd4] }) 13... e5 14. Bxf6 Nxf6 15. Qxe5 Nxd5 16. Qd4 Nxe3 17. Qxe3 Re8 18. Be4 f5) 11... Nxd5 (11... exd5 12. Bd3 { les blancs atteignent leur position idéale } { [%cal Gg1e2] }) 12. Bxd8 Nxc3 13. Bh4 (13. Bxc7 Nd5 { [%cal Gd5e3] }) 13... Nd5 14. Bf2 { Position classique. Le seul désavantage des blancs est un retard de développement. Les noirs ont pour but de créer une faiblesse permanente ou de pénétrer avec les tours, ou à échanger un des fous. } { [%cal Ge3e4] } 14... c5 (14... f5 { [%cal Gc7c5,Be6e5] }) 15. e4 (15. Bb5 Rfd8 { Ce coup tient tout en ordre } 16. Bxd7 (16. e4 Nc7 17. Bxd7 Rxd7 18. dxc5 f5 19. cxb6 axb6 20. Ne2 fxe4 21. fxe4 Bxe4) 16... Rxd7 17. dxc5 bxc5 18. Ne2 Nb6 { [%cal Gd7d1] }) 15... Ne7 { [%cal Gf7f5] } (15... Nf4 16. Be3 Ng6 { cavalier moins bien placé ici } { [%csl Gg6] }) 16. Ne2 (16. Bb5 Bc6 { L’échange des fous égalise })  (16. O-O-O { très risqué } 16... Rac8 17. Kb1 c4 { [%cal Rf1d3] } 18. Ne2 (18. Re1 { meilleur }) 18... f5 19. exf5 Nxf5 20. Nc3 Nf6 21. Be2 Nd5 22. Nxd5 Bxd5 { les fous blancs sont peu actifs } { [%csl Rd4] }) 16... f5 (16... Rac8 17. Nc3 cxd4 18. Bxd4 Nc5 19. Rd1 Rfd8 20. Be3 Rxd1+ 21. Kxd1 e5 22. b4 Ne6 23. Kc2 Nc6 24. Kb2 { le roi s'abrite }) 17. Ng3 (17. Nf4?! fxe4 18. Nxe6 Rf6)  (17. exf5 Nxf5 18. dxc5 Nxc5 $10) 17... fxe4 18. fxe4 cxd4 19. Bxd4 Rac8 $10 { paire de fous blancs compensée par un meilleur développement des noirs } *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Ce2 Part. 12 (→19)"]
+[Site "https://lichess.org/study/QIVtiBVE/kseiNKSb"]
+[Result "*"]
+[UTCDate "2021.02.28"]
+[UTCTime "15:23:28"]
+[Variant "Standard"]
+[ECO "E29"]
+[Opening "Nimzo-Indian Defense: Sämisch Variation, Capablanca Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. a3 Bxc3+ 6. bxc3 c5 { [%cal Gb7b6,Gc8a6,Gb8c6,Gc6a5,Ga8c8] } 7. Bd3 Nc6 8. Ne2 (8. e4 cxd4 (8... d5 9. cxd5 exd5 10. e5 Ne4 11. Ne2 Bg4 12. Bb2 (12. f3 Bxf3 13. gxf3 (13. Bxe4 Qh4+) 13... Qh4+ 14. Ng3) 12... cxd4 13. cxd4 Qb6 14. Bxe4 dxe4 15. Bc3 Rfd8) 9. cxd4 Nxd4 10. e5 Ne8) 8... b6 9. e4 { [%cal Gc1g5] } 9... Ne8 10. O-O (10. e5 Ba6 11. Qa4 Na5 12. dxc5 Qc7 { Sacrifice typique } 13. Be3 f6 (13... bxc5) 14. Rd1 bxc5 15. exf6 Nxf6 16. Bf4 e5 17. Bg3 d6 { Fous blancs peu actifs })  (10. Be3 Ba6 11. Ng3 (11. dxc5 Ne5!) 11... Na5 12. Qe2 Rc8 13. Rc1 (13. d5 Qh4 { [%cal Ge8d6,Gh4a4] }) 13... Qh4 { [%cal Ge8d6] }) 10... Ba6 11. f4!? { Cette position peut provenir de la Sämisch } { [%cal Gf7f5,Gd7d5,Ga8c8,Gc6a5,Bd1c2,Be4e5] } (11. e5 d6 12. Qc2 h6 13. Rd1 dxe5 14. dxe5 Qc7 15. Bf4 Nxe5 16. Be4 Rb8 (16... Rc8) 17. Qa4 Nf6 18. Bxe5 Qxe5 19. Bf3 Bb7!) 11... f5 (11... Na5 12. f5 f6 { [%cal Rf5f6] } 13. Nf4 Bxc4 14. Bxc4 Nxc4 15. fxe6 Nc7 { Jeu compliqué }) 12. exf5 (12. Ng3 g6 13. Be3 cxd4 14. cxd4 d5! { cherche à enfermer le fou e3 et échanger les fous de case blanche } 15. cxd5 Bxd3 16. Qxd3 fxe4 17. Qxe4 Qxd5 18. Qxd5 exd5 { contrôle des cases blanches, attaque sur d4 } { [%csl Gd4] })  (12. dxc5 fxe4 13. Bxe4 Bxc4 14. Bf3 Nf6 { contrôle des cases blanches })  (12. d5 { mieux pour les blancs ? } 12... Na5 (12... exd5 13. cxd5 Bxd3 14. Qxd3 fxe4 15. Qxe4 Nd6 16. Qd3 Na5 { [%csl Gc4,Gb3,Gd6][%cal Ga5c4,Ga5b3] }) 13. e5 Bxc4 14. Bxc4 Nxc4 15. d6 { une forte chaîne de pions blancs }) 12... exf5 13. dxc5 bxc5 14. Be3 d6 15. Ng3 g6 { Les noirs ont l'avantage à long terme ; les faiblesses blanches (c4) sont plus faciles à attaquer que les faiblesses noires (d6).
+Cependant le roi noir est plus exposé et les pièces noires ne sont pas coordonnées } 16. Bxf5!? (16. Re1 Na5 17. Nf1 Nf6 18. Bf2 Qd7 19. Ne3 Rae8 20. Bh4 Bb7 21. Bf1 Ne4 22. Nd5 Bxd5 23. cxd5 c4 { fous blancs mal à l'aise contrairement aux cavaliers noirs } { [%csl Gb3,Ge4][%cal Ga5b3] }) 16... gxf5 17. Qd5+ Rf7 (17... Kh8 18. Qxc6 Bxc4 19. Rfd1 Qc8 20. Rxd6 Nxd6 21. Qxd6 Qe6 22. Qxc5 { les blancs ont des compensations pour la qualité }) 18. Qxc6 Bb7 19. Qa4 { Les noirs ont éloigné la Dame blanche au prix d'un pion et l'activité du fou est accrue } 19... h5 { meilleur que le coup de la partie } (19... Qf6 { Coup de la partie }) 20. Nxh5 (20. Rab1 Ng7) 20... Qh4 21. Qd1 (21. Ng3 Rh7 22. Kf2 Qxh2 23. Rg1 Rg7 24. Ne2) 21... Rh7 22. Rb1 Be4 23. Bf2 Qxh5 24. Qxh5 Rxh5 *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Ce2 Part. 13 (→18)"]
+[Site "https://lichess.org/study/QIVtiBVE/fAEtV7Rg"]
+[Result "*"]
+[UTCDate "2021.03.02"]
+[UTCTime "10:01:11"]
+[Variant "Standard"]
+[ECO "E49"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Botvinnik System"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 d5 6. a3 Bxc3+ (6... Be7 { possible mais une perte de temps }) 7. bxc3 dxc4 { à ne pas retarder, sinon les blancs prennent. } (7... c5 8. cxd5 exd5 9. Ne2 { Ici les noirs ont un développement facile et pas de faiblesse ; et même un plan pour éliminer un des fous blancs.
+Mais les blancs ont une forte majorité au centre et un plan clair : attaquer l'aile roi, de manière décisive. } { [%cal Gb7b6,Gc8a6,Ge3e4,Ge4e5,Ge2g3,Gf2f3] }) 8. Bxc4 c5 { les blancs ont un retard de développement mais ont toujours le même plan ; éventuellement créer un pion passé sur la colonne d.
+à noter, la majorité de pions noirs à l'aile dame. } 9. Ne2 (9. Nf3 Qa5 10. Bb2 (10. Qc2 cxd4 { créer une paire de pions isolés })  (10. Bd2 Ne4 { élimine la paire de fous } (10... Qc7 { meilleur } { [%cal Gb7b6,Gc8a6] } 11. Bd3 b6 12. e4 (12. Qe2 { empêche l'échange des fous, mais... } 12... Bb7 13. e4 Qc6 { des complications pour défendre le centre. }) 12... Ba6 13. Bxa6 Nxa6 14. Qe2 Qb7 15. e5 Ne4 { les noirs aspirent à ce type de position : contrôle des cases blanches, notamment d5. })) 10... cxd4) 9... Qc7 { libère la colonne d et interroge le fou } 10. Ba2 (10. Bd3 b6 { [%cal Gc8a6] } (10... e5 { [%cal Gb8c6] })) 10... b6 11. O-O Ba6 12. Re1 (12. f3 Nc6 13. Rf2 { les noirs vont centraliser les tours et échanger les fous en c4. } { [%cal Gc6a5,Ga6c4] }) 12... Nc6 13. Ng3 { [%cal Gg3h5,Gg3e4,Gg3f5] } (13. Bb2 Na5 14. Ng3 Bc4) 13... Rad8 { [%cal Re3e4,Ge6e5,Gd8d7,Gf8d8] } (13... Rfd8 { [%cal Ga8c8,Gc6a5,Ga6c4] }) 14. Bb2 (14. Nh5 Nxh5 15. Qxh5 Bd3!) 14... e5 15. Qc2 { [%cal Ga1d1] } (15. d5 Na5 16. e4 Ne8 (16... Bc4 17. Bc1) 17. Qg4 Nd6 18. Rad1 Qd7 19. Qh5 { [%cal Gd7a4] }) 15... Rd7 (15... Na5 16. dxe5 { [%cal Gc3c4] }) 16. Rad1 Rfd8 17. h3 c4!? { les noirs ne pouvant augmenter la pression sur d4, ils complètent le blocus pour que les fous n'aient pas de diagonale. } (17... Na5 { échoue ici } 18. dxe5 Qxe5 19. c4 Qe6 20. Bb1!? (20. Rxd7 Rxd7 21. Bb1) 20... Qxc4 (20... Rxd1 21. Rxd1 Rxd1+ 22. Qxd1) 21. Rxd7 Rxd7 22. Qf5) 18. a4? { coup de la partie, qui affaiblit prématurément b4. } (18. Bb1 { meilleur pour les blancs } 18... g6 19. a4) *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Ce2 Part. 14 (→21)"]
+[Site "https://lichess.org/study/QIVtiBVE/lnbDTO8r"]
+[Result "*"]
+[UTCDate "2021.03.03"]
+[UTCTime "08:05:07"]
+[Variant "Standard"]
+[ECO "E48"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Bishop Attack, Classical Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+{ Dans cette partie, difficultés pour savoir quand jouer (ou, surtout, ne pas jouer) c5 }
+4. e3 O-O 5. Bd3 d5 6. cxd5 exd5 7. Ne2 { Populaire pour les blancs. Mais le fou c1 difficile à mobiliser } { [%cal Gd1e1,Ge1h4,Bf2f3,Bc7c5,Re3e4] } 7... Re8 { On essaie d'empêcher e4 (pour bloquer le fou) } (7... c5 { inconvénient : bloque la retraite du fou b4 } 8. O-O Nc6 9. a3 cxd4 (9... Bxc3?! 10. bxc3 { structure favorable pour les blancs }) 10. axb4 dxc3 11. b5 Ne5 (11... cxb2?! 12. Bxb2 { les fous blancs sont forts }) 12. Nxc3 { les blancs contrôlent les cases noires, pression sur la colonne a et le pion noir isolé } { [%csl Gd4][%cal Ga1a4,Ga4d4] }) 8. Bd2 { diffère le roque pour éviter les menaces sur le roi blanc } (8. Qc2)  (8. O-O Bd6 9. f3 (9. a3 c6 (9... Ng4 10. h3? (10. Nf4) 10... Nh2 11. Re1 Nf3+ 12. gxf3 Qg5+ 13. Kh1 Qh4 14. Nf4? (14. Kg1) 14... Bxh3 15. Ncxd5 Re6 16. Nxe6 Bf5+ 17. Kg1 Qh2+ 18. Kf1 Bg3 { mat imparable }) 10. Qc2 Bxh2+!? 11. Kxh2 Ng4+ 12. Kg3 Qg5 { forte attaque qui a terminé sur une nulle (mais bon... +1.6 d'après Stockfish) })  (9. h3 { [%cal Gd1c2,Gf1d1,Rc7c5,Gb8d7,Gd7f8,Gf8g6,Gg6h4,Ga1b1] }) 9... c5 10. Qe1 Nc6 11. Qh4 Be7 (11... Ne7 { [%cal Ge7g6] }) 12. Qf2 a6 13. g4 b5 { [%cal Gb5b4,Ga6a5,Gc8a6] }) 8... a6 { Fd6 sur tout autre coup d'attente des blancs } { [%csl Gb5][%cal Gb4d6] } (8... c5 { Imprécis à cause de a3, les blancs gagnent la paire de fou } 9. a3)  (8... Bd6 { possible } 9. Qc2 c6 10. f3 (10. h3!? { [%cal Gg2g4,Ge1c1] }) 10... c5 11. dxc5 Bxc5 12. e4 dxe4 13. Nxe4 Nxe4 14. Bxe4 Qb6 15. Bxh7+ Kh8 16. Be4 Be6) 9. Ng3 (9. O-O { Plutôt nul } 9... Bd6 10. Rc1 Nbd7 (10... c5 { Mal joué } 11. dxc5 Bxc5 12. Nb5 Nbd7 (12... axb5 13. Rxc5) 13. Nbd4 { les blancs ont une position agréable }) 11. f3 c5) 9... Nc6 { force les blancs à roquer immédiatement. Le cavalier bloque temporairement le pion c7 dont l'avance est essentielle après f3 } { [%cal Bc6d4,Gc6e7,Gc6b4] } 10. O-O Bd6 11. f3 (11. a3 Ne7 { [%csl Gf5][%cal Gh7h5,Gc7c5] }) 11... Nb4 { Nécessaire car il faut absolument avancer le pion c7 suite au coup f3 } 12. Bb1 c5! 13. dxc5 (13. Nce2 { était plus prudent pour les blancs }) 13... Bxc5 14. Na4 Bf8 15. Qb3 (15. Bc3 { était mieux }) 15... d4! { ressource tactique qui profite du manque de coordination des pièces blanches } 16. Bxb4 Rxe3! 17. Bd3 Be6! 18. Qa3 Bxb4 19. Bxh7+ Kxh7 20. Qxb4 b5 21. Nc5 Bc4 { Justifie le coup Fe6 } *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Ce2 Part. 15 (→19)"]
+[Site "https://lichess.org/study/QIVtiBVE/kgy3tE1s"]
+[Result "*"]
+[UTCDate "2021.03.04"]
+[UTCTime "13:32:35"]
+[Variant "Standard"]
+[ECO "E48"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Bishop Attack, Classical Defense"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 d5 6. Ne2 { les noirs doivent frapper immédiatement au centre, sinon les blancs jouent a3 et sont mieux. } 6... c5 (6... dxc4 7. Bxc4 e5!? { libère le fou c8 et attaque le centre }) 7. cxd5 (7. O-O cxd4 8. exd4 dxc4 9. Bxc4 Nbd7 { blocus sur d5. Les blancs attaquent l'aile roi ; combat équilibré. } { [%cal Gd7b6,Gc8d7,Gd7c6,Bb8c6,Bb7b6,Bc8b7] })  (7. a3 { Deux options pour les noirs ici } 7... cxd4 (7... Bxc3+ 8. Nxc3 (8. bxc3 dxc4 9. Bxc4 Qc7 { Transpose dans la partie 13 }) 8... cxd4 9. exd4 dxc4 10. Bxc4 Nc6 11. Be3 b6 { fous blancs passifs } { [%cal Gc8b7,Gc6e7,Gc6a5] }) 8. exd4 (8. axb4 dxc3 9. Nxc3 Nc6 10. b5 Ne5 11. cxd5 Nxd3+ 12. Qxd3 Nxd5 $10) 8... dxc4 9. Bxc4 Be7 { et les noirs vont lutter contre le pion isolé } { [%csl Gd4] }) 7... cxd4 8. exd4 Nxd5 { les blancs ont un pion isolé } { [%csl Gd4] } (8... exd5 { mauvais : les structures rigides favorisent le camp ayant l'initiative, en l'occurrence les blancs }) 9. O-O Nc6 { La position principale } { [%cal Gd3c2,Gd1d3] } 10. Bc2 (10. Qc2 { Ne mène à rien pour les blancs } 10... h6 { [%cal Gb4d6,Gc6e7,Gc8d7] } (10... g6 { [%cal Gf8e8,Gb4f8,Gf8g7] }))  (10. Be4 Nf6 11. Bf3 h6 { d5 paré par Ce5 } { [%cal Gc6e7,Ge7d5,Bc8d7,Ba8c8] }) 10... Bd6 (10... Re8 { Idée de Karpov } { [%cal Gg7g6,Gb4f8,Gf8g7] }) 11. Ne4 { on peut penser que Fd6 était mal joué, mais le cavalier ici bouche la vue du fou c2 ; d'autre part, ce coup permet de contre la variante 11. Dd3 } (11. Qd3 Qh4 12. g3 Qh5) 11... Be7 12. a3 { [%cal Rd5b4,Gd1d3] } 12... Qc7 { [%csl Gf4,Gd4][%cal Gc7f4,Gf8d8,Gd5f6,Gc7b6] } (12... Re8 { Idée de Karpov (voir le coup 10... Te4) })  (12... e5 { ce coup égalise (les pions du centre s’échangent) }) 13. Qd3 Rd8 14. Ng5 { Apparemment douteux, mais force g6 } (14. N4c3 g6 15. Bh6 Nxc3 16. bxc3 e5 { On voit le bon placement de la tour }) 14... g6 15. Qf3 Bf8 (15... Bf6 { Plus précis } { [%cal Gf6d4] }) 16. Rd1 Bg7 17. h4!? (17. Bb3 h6 18. Ne4 Nce7 { [%csl Gd5][%cal Gc8d7,Ga8c8] }) 17... h6 { après ce coup, les noirs seront forcés d'ouvrir la diagonale b1-h7 où la dame blanche va pénétrer. } (17... b6 18. h5 Ba6 { même si la colonne h s'ouvre et si les blancs peuvent pénétrer en h7, l'attaque n'est pas décisive. }) 18. Ne4 Nce7 19. N2c3 Bd7 (19... b6 { le coup est plus précis que le coup de la partie }) *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Ce2 Part. 16 (→10)"]
+[Site "https://lichess.org/study/QIVtiBVE/16o1YAjB"]
+[Result "*"]
+[UTCDate "2021.03.05"]
+[UTCTime "07:14:24"]
+[Variant "Standard"]
+[ECO "E46"]
+[Opening "Nimzo-Indian Defense: Reshevsky Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Ne2 { Ce cavalier a pour vocation à remplacer le cavalier c3 s'il est capturé, mais ralentit le développement des blancs } 5... d5 6. a3 Be7 (6... Bxc3+ 7. Nxc3 { Les blancs ont ce qu’ils veulent })  (6... Bd6 7. cxd5 (7. c5 Be7 { les noirs échangent alors leur mauvais fou } { [%cal Gb7b6,Ga7a5,Gc8a6] }) 7... exd5 { Fou bien placé en d6 }) 7. cxd5 (7. Nf4 c6 { [%cal Gb8d7,Gd5c4,Ge6e5] } 8. b3 Nbd7 9. Bb2 (9. Bd3 dxc4 (9... e5 10. dxe5 Nxe5 11. cxd5 g5!? 12. Nfe2 Nxd5 { l'initiative au centre plus importante que l'affaiblissement de l'aile roi }) 10. bxc4 e5 11. Nfe2) 9... dxc4 10. bxc4 e5 11. dxe5 Nxe5) 7... exd5 { Position de base de cette variante.
+Plan de base pour les blancs : rupture par f3 et e4, attaque sur l'aile roi, attaque de minorité sur l'aile dame.
+Les noirs mobilisent leur aile dame mais doivent contrer la rupture, généralement par c5 } { [%cal Gf2f3,Ge3e4,Gc7c5] } (7... Nxd5 8. Nxd5 (8. e4 Nxc3 9. Nxc3 c5)  (8. Ng3 c5)  (8. g3 c5 9. dxc5 Nxc3 10. Nxc3 Qxd1+ 11. Kxd1 Bxc5 $10)  (8. Bd2 Nd7 { [%cal Gc7c5,Gb7b6,Gc8b7] })  (8. Qc2 Nd7 { [%cal Gc7c5,Gb7b6,Gc8b7] }) 8... exd5) 8. g3 (8. Nf4 { L’échange des cavaliers blancs annule } { [%cal Gf1d3,Ge1g1,Ga7a5,Gb8a6,Gc7c6,Ga6c7,Gc7e6] })  (8. Ng3 { [%cal Gf1d3,Gc7c5] })  (8. b4 { D'actualité } { [%csl Gc5][%cal Ge2g3,Gf1d3] } 8... Bf5 { Deux exemples de parties : } 9. Ng3 (9. f3 h6 (9... h5!?) 10. Ng3 Bg6 11. Bd3 Bd6 12. Nf5 Nc6 { [%csl Gf5][%cal Gc6e7] }) 9... Bg6 10. Be2 Re8 11. O-O Bd6 12. f4 h6 13. f5 Bh7 14. Bd3 Nbd7 15. Qf3 c6 { Pas de problème majeur pour les noirs }) 8... c6 (8... Nbd7 { [%cal Gd7b6] } 9. Bg2 Nb6 10. O-O Re8 11. b3 Bf5 12. f3 c5 13. g4 Bg6 14. Nf4 cxd4 15. exd4 Rc8)  (8... a5 { [%cal Gb8a6] }) 9. Bg2 Bf5?! { ce coup de la partie facilite les idées blanches : e4 et g4... } (9... Na6 { après f3, on répond c5 } { [%cal Ga6c7,Ga7a5,Rb2b4] })  (9... a5 { [%cal Rb2b4] }) 10. f3 *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Fd3 et Cf3 Part. 17 (→28)"]
+[Site "https://lichess.org/study/QIVtiBVE/QLm8Pb35"]
+[Result "*"]
+[UTCDate "2021.03.05"]
+[UTCTime "08:00:21"]
+[Variant "Standard"]
+[ECO "E55"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Gligoric System, Bronstein Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 d5 6. Nf3 { développement classique } 6... c5 7. O-O dxc4 8. Bxc4 Nbd7 { L'un des schémas les plus populaires } { [%cal Gb7b6,Gc8b7,Ga8c8] } 9. Qb3 (9. Qe2 { [%cal Gf1d1] } 9... b6 10. d5 { conduit à une variante forcée où les blancs gagnent deux pions mais les noirs compensent par une forte initiative sur l'aile roi } (10. Rd1 { Plus prudent } 10... cxd4 { (il faut empêcher d5 soutenu par la tour) } 11. exd4 Bb7 { Position satisfaisante pour les noirs } { [%cal Gb4c3,Gb2c3,Gd8c7,Ga8c8,Gf8e8,Gf8d8] }) 10... Bxc3 (10... exd5? 11. Nxd5 { fou b4 hors jeu }) 11. dxe6 Ne5 12. exf7+ (12. bxc3 Nxf3+ 13. Qxf3 Bxe6 $10) 12... Kh8 13. bxc3 Bg4 14. e4 Qe7 { [%cal Ge5c4,Ge7e4] } 15. Re1 b5 16. Bxb5 Nh5)  (9. a3 { Partie 18 et 19 }) 9... cxd4 10. Qxb4 (10. exd4 Be7 { [%cal Gd7b6,Gc8d7,Gd7c6] } 11. Re1 Nb6 12. Be2 Bd7 13. Ne5 Bc6 14. Nxc6 bxc6 15. Be3 Nfd5 16. Rad1 Nxe3 17. fxe3 Rb8 { [%csl Gd4,Ge3][%cal Gb8b1] }) 10... dxc3 11. Qxc3 Qc7 12. Qb3 (12. Be2?! Qxc3 13. bxc3 Ne4)  (12. Bd2 Ne4 $10) 12... b6 13. Be2 (13. Bd2 Nc5 14. Qc2 Bb7 { [%cal Gf6g4,Gb7e4,Gb7f3] }) 13... Bb7 14. Nd4 { [%cal Rf6g4,Gf2f3,Ge3e4] } (14. Bd2 Nc5 15. Qb4 Nfe4 16. Rfc1 a5 17. Qa3 Nxd2 18. Nxd2 Bd5 $10) 14... Nc5 15. Qa3 e5 { les noirs prennent l'initiative } 16. Nb3 (16. Nb5 Qc6 17. f3 Ba6 18. Qb4 e4 { [%csl Rc1][%cal Re3e4] })  (16. Nf5 Rfd8 17. f3 e4 { Développement des blancs incomplet }) 16... Nxb3 17. axb3 (17. Qxb3 Rfd8 18. f3 e4 { [%csl Rc1][%cal Re3e4] }) 17... Rfd8 18. Re1 { [%cal Ge2f1] } (18. b4 Qc2!) 18... a5 { Met la dame blanche hors jeu, prépare l’échange des fous.
+Les blancs doivent sacrifier le pion e3 pour redonner vie à leur position } 19. e4 Bxe4 20. Bg5 h6 21. Rac1 Qb7 22. Bxf6 gxf6 23. Bf1 Rd4 { les noirs contrôlent les cases noires (contre la dame blanche) } 24. b4 { sacrifice d'un autre pion pour activer la dame blanche } 24... Rxb4 25. Rc4 { Les noirs ont deux pions d'avance, ils peuvent échanger, même au pris de l’activation du fou blanc } 25... Rxc4 26. Bxc4 Kg7 27. h4 Bg6 28. Qg3 h5 { les blancs sont perdus } *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Fd3 et Cf3 Part. 18 (→17)"]
+[Site "https://lichess.org/study/QIVtiBVE/swZtssJU"]
+[Result "*"]
+[UTCDate "2021.03.06"]
+[UTCTime "10:42:23"]
+[Variant "Standard"]
+[ECO "E55"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Gligoric System, Bronstein Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 c5 6. Nf3 d5 7. O-O dxc4 8. Bxc4 Nbd7 9. a3 cxd4 (9... Ba5 { Partie 19 })  (9... Bxc3 { Pas bon ici... } 10. bxc3 b6 11. Bd3 Bb7 12. Re1 { Formation plus logique pour les blancs qui veulent faire e4. Trois possibilités pour les noirs : } 12... Ne4 (12... e5 13. e4 { supériorité centrale des blancs } { [%cal Gc1g5] })  (12... Be4 13. Bf1 { [%cal Gf3d2,Gf2f3] } (13. Bxe4 Nxe4 14. Qc2 { Noirs passifs, quand les blancs ont des plans } { [%cal Gc3c4,Gc1b2,Ga3a4,Ga4a5,Gd4d5] })) 13. Bb2 { les blancs sont mieux } { [%cal Gc3c4,Ga3a4,Ga4a5,Ga1c1,Gf3d2,Ge4d2] }) 10. axb4 (10. exd4 Bxc3 11. bxc3 Qc7 { Voir partie 19 } { [%cal Gb7b6,Gc8b7,Ga8c8] }) 10... dxc3 11. bxc3 { Les blancs ont la paire de fous et une structure relativement saine. S’ils terminent le développement sans problème ils auront l'avantage } 11... Qc7! { Essentiel pour ralentir le développement et exercer une pression sur c3.
+Les noirs cherchent à empêcher c4 } { [%cal Rc3c4] } 12. Be2!? { Sacrifice de pion puissant } (12. Qe2 Nb6 13. Bd3 e5 { [%cal Gc8e6,Ge6c4] })  (12. Qb3!? Nb6 13. Be2 e5 14. Ra5 (14. c4 Be6 15. Bb2 Nxc4 16. Rfc1 Nxb2 $10) 14... Be6 15. Qc2 Nbd7 16. c4 b6 17. Ra6 { Le plus incisif } (17. Ra3 Rfc8 18. Nd2 b5 19. c5 a5 { avec un bon contre-jeu }) 17... Rfc8 18. Nd2 Bd5! { Les noirs conquièrent c5 pour le Cavalier et créent un pion passé en a5 } { [%cal Gd5b7,Ga7a5] }) 12... Nd5 (12... Qxc3 { Fausse bonne idée } 13. Ba3 { [%cal Gd1c1,Gf1d1,Ba1b1,Ba3b2] } 13... Qc7 14. Bb2 a6 15. Rc1 Qb6 16. Qa4 { Forte pression des blancs }) 13. Bb2 (13. c4 Nc3 14. Qc2 Nxe2+ 15. Qxe2 b6 16. Bb2 Bb7 17. Rfd1 Rfd8 { Les noirs doivent être prudents } 18. Nh4 Nf8 19. b5 a6 { échange des pions de l'aile dame })  (13. Bd3 Qxc3 14. Ra3 Qf6 (14... Qxb4!?) 15. Qc2 h6 16. b5 Nb4 17. Bh7+ Kh8 18. Qb1 a5 { Position difficile à juger }) 13... Nxc3 14. Qd2 { Approche nouvelle de la position, pour conserver le fou fort de case noires et donnant aux noirs un fort retard de développement. } (14. Bxc3 Qxc3 15. Qd6 Qc6 { Simplification considérable après ce coup }) 14... Nxe2+ 15. Qxe2 Nb6 { L’éloignement du cavalier de l’aile roi (coup de la partie) est en fait le coup fatal... } (15... b6 { Bien que... } 16. Rac1 (16. Rfd1)) 16. Rfc1 Qd8 17. Rd1 Qe7 *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Fd3 et Cf3 Part. 19 (→27)"]
+[Site "https://lichess.org/study/QIVtiBVE/mGulJG2x"]
+[Result "*"]
+[UTCDate "2021.03.07"]
+[UTCTime "07:09:38"]
+[Variant "Standard"]
+[ECO "E55"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Gligoric System, Bronstein Variation"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 d5 6. Nf3 c5 7. O-O dxc4 8. Bxc4 Nbd7 9. a3 Ba5 { Le plan des noirs reste le même, mais les blancs sont limités par cette menace } { [%cal Gc5d4,Ga5c3] } 10. Qe2 (10. dxc5 { Pas bon pour les blancs } 10... Bxc3 11. bxc3 Nxc5 { mauvaise structure pour les blancs })  (10. Bd2 cxd4 11. exd4 (11. Nxd4 Ne5 12. Be2 Bd7 { [%csl Rd2] }) 11... Bxc3 12. bxc3 (12. Bxc3 Nb6 { [%cal Gb6d5,Gb7b6] }) 12... b6 13. Qe2 Bb7 14. Bd3 Qc7 15. Rfe1 Rac8 $10 { [%cal Gf8e8] })  (10. Nb5 cxd4 11. Qxd4 (11. Nbxd4 e5 12. Nb5 e4 13. Nd2 Ne5 { Les noirs s’emparent du centre }) 11... Bb6 12. Qh4 a6 13. Nbd4 Re8 14. b4 Nf8 { [%cal Ge6e5] } 15. Ne5 N6d7 { Après les échanges qui s’ensuivent, le combat est égal }) 10... cxd4 11. exd4 Bxc3 12. bxc3 Qc7 { Les chances sont égales } { [%cal Gb7b6,Gc8b7,Ga8c8,Gf8e8,Gc4d3,Gf1e1,Gc1g5,Ga1d1,Gc1b2] } 13. Bd2 (13. Bd3 { Les noirs n'acceptent pas forcément le sacrifice } { [%cal Bc7c3] } 13... b6 { La capture du pion donnerait de nombreux temps aux blancs } { [%cal Gc8b7,Ga8c8] })  (13. Bb2 { [%csl Gf4][%cal Gc4d3,Gc3c4,Gc7f4,Gc8b7,Gb7f3,Gf6h5,Gh5f4] }) 13... b6 14. Rfe1 Bb7 15. Bd3 Rac8 { Les blancs doivent demeurer en alerte, les noirs veulent opérer un blocus sur les pions pendants et exploiter les cases blanches } { [%cal Gf8e8] } (15... Rfe8 16. c4 Rad8 17. Bg5 Nf8 { [%cal Gd8d4,Gf8g6,Gg6f4] } 18. Bxf6 gxf6 19. Be4?! (19. Rad1 Kg7 { Jeu compliqué }) 19... Bxe4 20. Qxe4 Qxc4 { Les blancs ont peu de compensation pour le pion }) 16. c4 (16. Ne5 Nxe5 17. dxe5 Nd7 18. Rad1 Bd5) 16... Rfd8 { Imprécis } (16... Rfe8 { meilleur } { [%cal Gb7f3,Ge6e5,Rd4d5] }) 17. Rac1 Qd6 { [%cal Gd6d4,Gd6a3,Gb7f3] } (17... Nf8 { [%cal Gd8d4] }) 18. Bb4 Qf4! { [%cal Gb7f3] } 19. Qe3 Nh5 (19... Qxe3 20. fxe3 (20. Rxe3 Nd5) 20... Nc5 21. Bf1 Nce4 { égalité approximative }) 20. Be7 { Avec une tour en e8, les blancs n'auraient pas eu cette possibilité } 20... Re8 21. Bg5 Qxe3 (21... Qd6 { ce coup mérite examen }) 22. fxe3 (22. Bxe3 { moins ambitieux } 22... Nhf6 { Jeu équilibré }) 22... h6 23. Bh4 g6!? { positionnellement risqué : affaiblir les cases noires quand on n'a pas de fou de cases noires est dangereux. } 24. Nd2 { [%cal Gd2e4,Ge4d6] } 24... e5 { Poursuite du plan } { [%cal Ge5d4,Ge3d4,Gb7g2,Gh5f4] } 25. Ne4 { Entre dans les complications } (25. d5 { Moins compliqué, plus positionnel }) 25... exd4 { Le combat tactique débute } (25... Bxe4 { était meilleur } 26. Bxe4 Nhf6 27. Bd3 Kg7 28. a4 { Léger avantage aux blancs avec leur paire de fous, mais les noirs sont solides }) 26. Nd6 Nc5 27. Bb1? (27. Nxc8 Nxd3) 27... d3! *
+
+
+[Event "Nimzo-indienne: Rubinstein 4.e3 O-O avec Fd3 et Cf3 Part. 20 (→??)"]
+[Site "https://lichess.org/study/QIVtiBVE/cUbZI5iL"]
+[Result "*"]
+[UTCDate "2021.03.07"]
+[UTCTime "08:37:59"]
+[Variant "Standard"]
+[ECO "E58"]
+[Opening "Nimzo-Indian Defense: Normal Variation, Bernstein Defense, Exchange Line"]
+[Annotator "https://lichess.org/@/frydor"]
+[FEN "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"]
+[SetUp "1"]
+
+4. e3 O-O 5. Bd3 d5 6. Nf3 c5 7. O-O Nc6 { On lutte pour le centre avec les coups naturels. Ici les noirs n’essaient pas d’échanger les pions. } 8. a3 Bxc3 (8... Ba5 { Moins bon ici }) 9. bxc3 Qc7!? { Ce coup limite les possibilités blanches } 10. cxd5 (10. Bb2 Na5 11. cxd5 exd5 12. Ne5 c4 13. Bc2 Ne4 { [%cal Ge4d6,Gf7f6] })  (10. Qe2 dxc4 11. Bxc4 e5 { [%cal Gc8g4,Be5e4,Bf6g4] })  (10. h3!? dxc4 (10... Ne7 11. cxd5 exd5 { [%cal Gc8f5] }) 11. Bxc4 e5) 10... exd5 { Ressemble à la position à éviter pour les noirs (partie 13, coup 7 alternatif), sauf qu’ici le cavalier est en f3 et pas en e2. } 11. a4 { les blancs cherchent une diagonale pour le fou c1 } (11. dxc5 { [%cal Gc3c4] } 11... Bg4 12. Be2 Ne4 13. Bb2 Rfe8 14. Qxd5 { Pas intéressant : } (14. Qc2 Na5) 14... Rad8) 11... Re8 12. Ba3 c4 13. Bc2 { Position atteinte dans de nombreuses parties de maîtres.
+La stratégie tourne autour de la case e4 } 13... Qa5 { Les deux cases possibles pour la dame blanche sont moins fortes que l’actuelle. } (13... Ne4 { moins précis ? })  (13... Bg4 { [%cal Gg4h5,Gh5g6] } 14. Qe1 Bh5 (14... Bxf3 15. gxf3 Qd7 16. Kg2) 15. Nh4 { [%cal Gf2f3] }) 14. Qc1 (14. Qe1 Ne4 15. Bxe4 (15. Bb2 { [%cal Gf3h4,Gf2f3] } 15... Qd8 { [%cal Gc8f5] }) 15... Rxe4 { moins bon pour les blancs qui ne peuvent plus aussi bien percer en e4 }) 14... Ne4 (14... Bg4) 15. Bxe4 Rxe4 16. Nd2 Re8 17. e4 Be6 { La position critique de la variante } 18. Qc2 (18. e5 Qxa4 19. f4 Bf5 20. Rf2 { [%cal Gd2f1,Gf1e3] } 20... Qa5 { [%cal Ga5d8] }) 18... dxe4 19. Nxe4 Bf5 20. f3 Qd5 { les blancs dominent les cases noires, mais les noirs sont forts sur les blanches } 21. Rfe1 Na5 (21... Re6!? { [%cal Ga8e8] }) 22. Re3 Re6 23. Rae1 Rae8 24. g4 Bg6 25. Qf2 Bxe4 26. fxe4 Rxe4 27. Qf3 Rxe3 28. Rxe3 Qd7 29. Qf5 Qxa4 30. Rxe8+ Qxe8 31. Qxa5 { nulle inévitable } 31... Qe1+ 32. Kg2 Qe2+ 33. Kg3 Qe3+ 34. Kg2 *
+
+
