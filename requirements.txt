@@ -1,2 +1,1 @@
 chess>=1.7.0
-git+git://github.com/official-stockfish/Stockfish
