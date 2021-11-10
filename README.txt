@@ -8,9 +8,7 @@ Un autre programme, AutoPGN, non intégré à ChessTrainer, permet de construire
 Pour fonctionner, les deux programmes nécessitent l’ajout du module chess (python-chess) créé par Niklas Fiekas.
 Le module peut être téléchargé ici :
 https://github.com/niklasf/python-chess
-Sa documentation est là :
-https://python-chess.readthedocs.io/en/latest/
-Il suffit d’ajouter le dossier « chess » à la racine du répertoire où se trouve les programmes.
+Il suffit d’ajouter le dossier « chess » à la racine du répertoire où se trouvent les programmes.
 
 Il faut également avoir le moteur d’échecs stockfish installé pour pouvoir lancer l’analyse.
 Il est possible de modifier l’adresse de l’exécutable, et de modifier également certaines options.
