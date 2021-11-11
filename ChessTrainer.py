@@ -33,7 +33,7 @@ import asyncio
 import chess.engine
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfile
-from tkinter.messagebox import askokcancel, showinfo
+from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
 from random import choice
 
@@ -216,10 +216,37 @@ class GUI(tk.Tk):
 
     def before_new(self):
         if askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel'):
-            self.new()
+            self.ask_new()
 
-    def new(self):
+    def set_new_fen(self,f,text):
+        f.destroy()
+        if text == "":
+            self.new()
+        else:
+            self.new(fen=text)
+
+    def ask_new(self):
+        f = tk.Toplevel(master=self,bg="white")
+        f.transient(self)
+        f.resizable(width=tk.FALSE,height=tk.FALSE)
+        f.title("New PGN")
+        f.protocol('WM_DELETE_WINDOW',lambda :None)
+
+        l = tk.Label(f,text="Give the FEN (empty for default one)",bg="white",width=30)
+        l.pack()
+        text_fen = tk.Text(f,width=32,height=3)
+        text_fen.pack()
+
+        button_OK=tk.Button(f,text="OK",command=lambda :self.set_new_fen(f,text_fen.get(1.0,"end")[:-1]))
+        button_OK.pack()
+
+    def new(self,fen=None):
         self.pgn=pgn.Game()
+        if fen is not None:
+            try:
+                self.pgn.setup(fen)
+            except:
+                showerror("Error","invalid FEN")
         self.pgn_games=[self.pgn.game()]
         self.pgn_index=0
         self.change_game_list()
