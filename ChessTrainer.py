@@ -80,7 +80,7 @@ class GUI(tk.Tk):
         self.canvas.bind("<Button-1>", self.click_edit)
 
         self.canvas.pack(side=tk.BOTTOM,expand=True,fill=tk.BOTH)
-        
+
         self.mainbar = tk.Frame(self.buttons_frame)
 
         self.button_quit = tk.Button(self.mainbar, text="New", command=self.before_new)
@@ -120,7 +120,7 @@ class GUI(tk.Tk):
         self.button_train.pack(side=tk.RIGHT)
         self.button_edit = tk.Button(self.navbar, text="Edit", command=self.edit,state=tk.DISABLED)
         self.button_edit.pack(side=tk.RIGHT)
-        
+
         self.navbar.pack(fill=tk.X)
 
         self.editbar = tk.Frame(self.buttons_frame)
@@ -390,7 +390,7 @@ class GUI(tk.Tk):
 
     def edit_headers(self,event):
         self.text_headers.unbind("<Button-1>")
-        
+
         fen_change_headers = tk.Toplevel(master=self,bg="white")
         fen_change_headers.transient(self)
         fen_change_headers.resizable(width=tk.FALSE,height=tk.FALSE)
@@ -751,7 +751,7 @@ class GUI(tk.Tk):
             to_square=cur_move.to_square
         except IndexError:
             cur_move=None
-            
+
         self.canvas.delete("square")
         self.canvas.delete("arrow")
         color = chess.WHITE
@@ -781,6 +781,13 @@ class GUI(tk.Tk):
         if not self.training:
             self.draw_comment_arrows()
             self.draw_variations_arrows()
+            if self.analyzing:
+                try:
+                    self.canvas.tag_raise("analyze_arrow","square")
+                    self.canvas.tag_raise("analyze_arrow","piece")
+                    self.canvas.tag_raise("analyze_arrow","arrow")
+                except:
+                    pass
 
 def init():
     window = GUI()
