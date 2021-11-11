@@ -27,6 +27,7 @@
 #                                   #
 #####################################
 
+import sys
 import chess
 import chess.pgn as pgn
 import asyncio
@@ -58,6 +59,7 @@ def getpgn(fen=pgn.Game().board().fen(),tree_depth=10,engine_depth=20,ompv=3,pla
     asyncio.run(get_node_from(0,pgn_tree,tree_depth,engine_depth,ompv,player,pmpv))
     t1=datetime.datetime.now()
     print("Ending on",t1.strftime("%x at %X"),"after",datetime.timedelta(seconds=(t1-t0).total_seconds()))
+    print(pgn_tree)
     return pgn_tree
 
 def total_nodes(pmpv,ompv,depth):
@@ -72,11 +74,10 @@ def total_nodes(pmpv,ompv,depth):
 async def get_node_from(from_depth,pgn_node,tree_depth,engine_depth,ompv,player,pmpv):
     global count
     count+=1
-    percent = round(count/approx_totalcount*100,2)
-    time_left = (100-percent)*(datetime.datetime.now()-t0).total_seconds()/percent
-    print("Approx.",percent,"% done. Time left estimated :",datetime.timedelta(seconds=time_left),pgn_node)
-    # print(pgn_node.game().board().variation_san(pgn_node.board().move_stack))
-    # print(pgn_node.game())
+    if count >= 10:
+        percent = round(count/approx_totalcount*100,2)
+        time_left = (100-percent)*(datetime.datetime.now()-t0).total_seconds()/percent
+        print("Approx.", percent, "% done. Time left estimated :", datetime.timedelta(seconds = time_left),end="\r")
     if from_depth == tree_depth:
         return pgn_node
     transport, engine = await chess.engine.popen_uci(stockfish_path)
