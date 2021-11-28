@@ -58,6 +58,7 @@ class GUI(tk.Tk):
     training=False
     analyzing=False
     analysis=None
+    analyze_task = None
 
     def __init__(self):
 
@@ -295,29 +296,36 @@ class GUI(tk.Tk):
         while self.analyzing:
             self.changing = False
             self.analysis = await self.engine.analysis(self.chessboard,multipv=3)
-            await asyncio.gather(self.updater(),self.analyze())
+            self.analyze_task = asyncio.create_task(self.analyze())
+            await asyncio.gather(self.updater(),self.analyze_task)
         await self.engine.quit()
+        self.analyze_task = None
         self.canvas.delete("analyze_arrow")
         self.button_analyze.configure(text="Analyze",command=lambda : asyncio.run(self.start_analyze()))
         self.label_score.configure(text="")
 
     async def analyze(self):
-        while not self.changing and self.analyzing:
-            try :
-                info = await self.analysis.get()
-                score = info.get("score")
-                if score is not None and info.get("multipv") == 1:
-                    label=self.readable(score.white(),info.get("depth"))
-                    self.label_score.configure(text=label)
-                    if score.is_mate():
-                        if score.relative.mate() == 0:
-                            break
-                        else:
-                            await asyncio.sleep(0.5)
-                    if not self.training:
-                        self.draw_analyze_arrows([info.get("pv")[0] for info in self.analysis.multipv])
-            except chess.engine.AnalysisComplete:
-                break
+        if self.chessboard.is_checkmate():
+            self.label_score.configure(text="Mate")
+        else:
+            while not self.changing and self.analyzing:
+                try :
+                    info = await self.analysis.get()
+                    score = info.get("score")
+                    if score is not None and info.get("multipv") == 1:
+                        label=self.readable(score.white(),info.get("depth"))
+                        self.label_score.configure(text=label)
+                        if score.is_mate():
+                            if score.relative.mate() == 0:
+                                break
+                            else:
+                                await asyncio.sleep(0.5)
+                        if not self.training:
+                            self.draw_analyze_arrows([info.get("pv")[0] for info in self.analysis.multipv])
+                except chess.engine.AnalysisComplete:
+                    break
+                except asyncio.CancelledError:
+                    break
         self.analysis.stop()
         self.analysis = None
 
@@ -336,9 +344,11 @@ class GUI(tk.Tk):
             return "Mate in "+mat
 
     def stop_analyze(self):
+        self.analyze_task.cancel()
         self.analyzing = False
 
     def change_analyze(self):
+        self.analyze_task.cancel()
         self.changing = True
 
     async def updater(self):
