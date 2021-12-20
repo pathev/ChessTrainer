@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.1
+# Version : 1.11
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -41,7 +41,7 @@ arrow_color = ["#FF3333","#FF9933","#FFFF33","#33FF33","#9933FF","#0099FF","#DDD
 comment_arrow_color = {"red": "#FFCCCC", "yellow": "#FFFFCC", "blue": "#CCCCFF", "green": "#CCFFCC"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
 stockfish_path = "/usr/games/stockfish"
-maxthreads = 4
+maxthreads = 16
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 
@@ -316,10 +316,7 @@ class GUI(tk.Tk):
                         label=self.readable(score.white(),info.get("depth"))
                         self.label_score.configure(text=label)
                         if score.is_mate():
-                            if score.relative.mate() == 0:
-                                break
-                            else:
-                                await asyncio.sleep(0.5)
+                            await asyncio.sleep(0.5)
                         if not self.training:
                             self.draw_analyze_arrows([info.get("pv")[0] for info in self.analysis.multipv])
                 except chess.engine.AnalysisComplete:
@@ -661,11 +658,11 @@ class GUI(tk.Tk):
             square = chess.square(current_column, current_row)
 
             if self.selected_square is not None:
+                move=chess.Move(from_square=self.selected_square,to_square=square)
                 self.selected_square = None
                 self.hilighted = []
                 self.refresh()
-                move=chess.Move(from_square=self.selected_square,to_square=square)
-                if move is self.pgn.has_variation(move):
+                if self.pgn.has_variation(move):
                     self.pgn = self.pgn.variation(move)
                     self.set_pgn()
             else:
