@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.11
+# Version : 1.13
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -23,7 +23,7 @@
 #         Patrick Thévenon          #
 #                                   #
 #       de Octobre 2021             #
-#             à Novembre 2021       #
+#             à Decembre 2021       #
 #                                   #
 #####################################
 
@@ -32,7 +32,7 @@ import chess.pgn as pgn
 import asyncio
 import chess.engine
 import tkinter as tk
-from tkinter.filedialog import askopenfilename, asksaveasfile
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
 from random import choice
@@ -262,21 +262,24 @@ class GUI(tk.Tk):
         self.refresh()
 
     def load(self):
-        filename = askopenfilename()
+        filename = askopenfilename(filetypes = [("PGN files","*.pgn")])
         if filename:
-            file = open(filename)
-            filebasename=filename.split('/')[-1].split('.')[0]
-            self.label_filename.configure(text=filebasename)
-            self.pgn_games=[]
+            self.do_load(filename)
+
+    def do_load(self,filename):
+        file = open(filename)
+        filebasename=filename.split('/')[-1].split('.')[0]
+        self.label_filename.configure(text=filebasename)
+        self.pgn_games=[]
+        game = pgn.read_game(file)
+        while game is not None:
+            self.pgn_games.append(game)
             game = pgn.read_game(file)
-            while game is not None:
-                self.pgn_games.append(game)
-                game = pgn.read_game(file)
-            self.pgn_index=0
-            self.change_game_list()
-            self.read()
-            self.pgn = self.pgn_games[self.pgn_index]
-            self.set_pgn()
+        self.pgn_index=0
+        self.change_game_list()
+        self.read()
+        self.pgn = self.pgn_games[self.pgn_index]
+        self.set_pgn()
 
     def change_game_list(self):
         self.sel_game_menu['menu'].delete(0,"end")
@@ -285,8 +288,10 @@ class GUI(tk.Tk):
             self.sel_game_menu['menu'].add_command(label=v, command = lambda v=v : self.sel_game_var.set(v))
 
     def save(self):
-        pgn_file = asksaveasfile()
-        print(self.pgn.game(), file=pgn_file, end="\n\n")
+        pgn_filename = asksaveasfilename(filetypes = [("PGN files","*.pgn")], defaultextension = ".pgn")
+        with open(pgn_filename, 'w') as pgn_file:
+            print(self.pgn.game(), file=pgn_file, end="\n\n")
+        self.do_load(pgn_filename)
 
     async def start_analyze(self):
         self.analyzing = True
@@ -431,8 +436,8 @@ class GUI(tk.Tk):
         fen_change_headers.title("Headers")
         fen_change_headers.protocol('WM_DELETE_WINDOW',lambda :None)
 
-        text_list=[None for _ in range(len(self.pgn.headers))]
-        for i,(key,value) in enumerate(self.pgn.headers.items()):
+        text_list=[None for _ in range(len(self.pgn.game().headers))]
+        for i,(key,value) in enumerate(self.pgn.game().headers.items()):
             f = tk.Frame(fen_change_headers)
             l = tk.Label(f,text=key,bg="white",width=10)
             l.pack(side=tk.LEFT)
@@ -455,8 +460,8 @@ class GUI(tk.Tk):
         self.text_headers.bind("<Button-1>", self.edit_headers)
 
     def accept_headers(self,fen,text_list):
-        for i,key in enumerate(self.pgn.headers):
-            self.pgn.headers[key] = text_list[i].get(1.0,"end")[:-1]
+        for i,key in enumerate(self.pgn.game().headers):
+            self.pgn.game().headers[key] = text_list[i].get(1.0,"end")[:-1]
         self.change_headers()
         self.destroy_change_headers(fen)
 
@@ -595,7 +600,7 @@ class GUI(tk.Tk):
     def change_headers(self):
         self.text_headers.configure(state=tk.NORMAL)
         self.text_headers.delete(1.0,"end")
-        for key,value in self.pgn.headers.items():
+        for key,value in self.pgn.game().headers.items():
             self.text_headers.insert("end",key+": "+value+"\n")
         self.text_headers.configure(state=tk.DISABLED)
 
