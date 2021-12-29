@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.13
+# Version : 1.14
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -436,19 +436,19 @@ class GUI(tk.Tk):
         fen_change_headers.title("Headers")
         fen_change_headers.protocol('WM_DELETE_WINDOW',lambda :None)
 
-        text_list=[None for _ in range(len(self.pgn.game().headers))]
-        for i,(key,value) in enumerate(self.pgn.game().headers.items()):
+        text_dict={}
+        for (key,value) in self.pgn.game().headers.items():
             f = tk.Frame(fen_change_headers)
             l = tk.Label(f,text=key,bg="white",width=10)
             l.pack(side=tk.LEFT)
             t = tk.Text(f,height=1,width=60)
-            text_list[i]=t
+            text_dict[key]=t
             t.insert("end",value)
             t.pack(side=tk.LEFT)
             f.pack()
         frame_action = tk.Frame(fen_change_headers)
 
-        button_go=tk.Button(frame_action,text="Change",command=lambda :self.accept_headers(fen_change_headers,text_list))
+        button_go=tk.Button(frame_action,text="Change",command=lambda :self.accept_headers(fen_change_headers,text_dict))
         button_go.pack(side=tk.RIGHT)
         button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.destroy_change_headers(fen_change_headers))
         button_cancel.pack(side=tk.RIGHT)
@@ -459,9 +459,13 @@ class GUI(tk.Tk):
         fen.destroy()
         self.text_headers.bind("<Button-1>", self.edit_headers)
 
-    def accept_headers(self,fen,text_list):
-        for i,key in enumerate(self.pgn.game().headers):
-            self.pgn.game().headers[key] = text_list[i].get(1.0,"end")[:-1]
+    def accept_headers(self,fen,text_dict):
+        for key in text_dict:
+            text=text_dict[key].get(1.0,"end")[:-1]
+            if text !="":
+                self.pgn.game().headers[key] = text
+            else:
+                self.pgn.game().headers.pop(key)
         self.change_headers()
         self.destroy_change_headers(fen)
 
@@ -765,6 +769,7 @@ class GUI(tk.Tk):
     def redraw_pieces(self):
         self.icons={}
         self.canvas.delete("piece")
+        self.canvas.delete("bg")
         for square,piece in self.chessboard.piece_map().items():
             x,y = chess.square_rank(square), chess.square_file(square)
             if self.flipped:
@@ -772,11 +777,14 @@ class GUI(tk.Tk):
             filename = "img/%s%s.png" % (chess.COLOR_NAMES[piece.color], piece.symbol().lower())
 
             if (filename not in self.icons):
-                self.icons[filename] = ImageTk.PhotoImage(Image.open(filename).resize((int(self.square_size),int(self.square_size))))
+                self.icons[filename] = ImageTk.PhotoImage(Image.open(filename).resize((self.square_size,self.square_size)))
 
-            x0 = (y * self.square_size) + int(self.square_size/2)
-            y0 = ((7-x) * self.square_size) + int(self.square_size/2)
+            x0 = (2*y+1) * self.square_size // 2
+            y0 = (2*(7-x)+1) * self.square_size // 2
             self.canvas.create_image(x0,y0, image=self.icons[filename], tags="piece", anchor="c")
+        bgfile="img/black_bg.png" if self.flipped else "img/white_bg.png"
+        self.icons["bg"]=ImageTk.PhotoImage(Image.open(bgfile).resize((self.square_size*8,self.square_size*8)))
+        self.canvas.create_image(4*self.square_size,4*self.square_size,image=self.icons["bg"],tags="bg",anchor="c")
 
     def refresh(self, event={}):
         if event:
