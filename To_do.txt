@@ -1,4 +1,3 @@
-* Nommer les cases, soit sur le côté, soit dans les cases ; problème sur la taille de police ?
 Problèmes à (mieux) régler :
 * L’arrêt quand l’analyse détecte un mat (géré par un break sur un mat 0 et des sleep pour les autres).
 * Mettre à jour le bouton Select game par un moyen moins barbare à trouver.
