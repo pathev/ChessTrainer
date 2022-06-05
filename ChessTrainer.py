@@ -37,10 +37,11 @@ from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
 from random import choice
 
-arrow_color = ["#FF3333","#FF9933","#FFFF33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
-comment_arrow_color = {"red": "#FFCCCC", "yellow": "#FFFFCC", "blue": "#CCCCFF", "green": "#CCFFCC"}
+arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
+comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
 stockfish_path = "/usr/games/stockfish"
+# stockfish_path="/usr/bin/stockfish"
 maxthreads = 16
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
