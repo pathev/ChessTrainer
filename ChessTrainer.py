@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.14
+# Version : 1.15
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -48,6 +48,7 @@ asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 class GUI(tk.Tk):
     square_size=64
     selected_square = None
+    selected_from_square = None
     hilighted = []
     icons = {}
     flipped=False
@@ -78,7 +79,6 @@ class GUI(tk.Tk):
         self.canvas = tk.Canvas(self.MainFrame, height=8*self.square_size, width=8*self.square_size,background="grey")
 
         self.canvas.bind("<Configure>", self.refresh)
-        self.canvas.bind("<Button-1>", self.click_edit)
 
         self.canvas.pack(side=tk.BOTTOM,expand=True,fill=tk.BOTH)
 
@@ -408,6 +408,10 @@ class GUI(tk.Tk):
         self.editbar.pack_forget()
         self.button_edit.configure(state=tk.NORMAL)
         self.canvas.unbind("<Button-1>")
+        self.canvas.unbind("<Button-3>")
+        self.canvas.unbind("<Alt-Button-3>")
+        self.canvas.unbind("<Control-Button-3>")
+        self.canvas.unbind("<Control-Alt-Button-3>")
         self.canvas.bind("<Button-1>", self.click_read)
         self.text_comment.unbind("<Button-1>")
         self.text_headers.unbind("<Button-1>")
@@ -422,10 +426,17 @@ class GUI(tk.Tk):
         self.editbar_states()
         self.canvas.unbind("<Button-1>")
         self.canvas.bind("<Button-1>", self.click_edit)
+        self.canvas_bind_arrow_create()
         self.text_headers.unbind("<Button-1>")
-        self.text_comment.unbind("<Button-1>")
         self.text_headers.bind("<Button-1>", self.edit_headers)
+        self.text_comment.unbind("<Button-1>")
         self.text_comment.bind("<Button-1>", self.edit_comment)
+
+    def canvas_bind_arrow_create(self):
+        self.canvas.bind("<Button-3>", lambda e:self.click_arrow_create(e,"green"))
+        self.canvas.bind("<Alt-Button-3>", lambda e:self.click_arrow_create(e,"blue"))
+        self.canvas.bind("<Control-Button-3>", lambda e:self.click_arrow_create(e,"red"))
+        self.canvas.bind("<Control-Alt-Button-3>", lambda e:self.click_arrow_create(e,"yellow"))
 
     def edit_headers(self,event):
         self.text_headers.unbind("<Button-1>")
@@ -517,10 +528,10 @@ class GUI(tk.Tk):
             self.val_ecart.set(0)
             lstbox_ecart=tk.OptionMenu(self.fen_reglages,self.val_ecart,0,1,2,3)
 
-            lbl_choix_partie=tk.Label(self.fen_reglages,text="Game choice:",bg="white")
+            lbl_choix_partie=tk.Label(self.fen_reglages,text="Position:",bg="white")
             self.val_choix=tk.StringVar(self.fen_reglages)
             self.val_choix.set("current")
-            lstbox_choix_partie=tk.OptionMenu(self.fen_reglages,self.val_choix,"current","random")
+            lstbox_choix_partie=tk.OptionMenu(self.fen_reglages,self.val_choix,"current","game start","random game start")
 
             frame_action = tk.Frame(self.fen_reglages)
 
@@ -543,10 +554,10 @@ class GUI(tk.Tk):
         self.fen_reglages.withdraw()
         self.player_color = chess.WHITE if self.val_coul.get() == "white" else chess.BLACK
         self.flipped = not self.player_color
-        if self.val_choix.get() == "random":
+        if self.val_choix.get() == "random game start":
             self.pgn = choice(self.pgn_games)
             self.pgn_index = self.pgn_games.index(self.pgn)
-        else:
+        elif self.val_choix.get() == "game start":
             self.pgn = self.pgn.game()
         self.editbar.pack_forget()
         self.navbar.pack_forget()
@@ -653,6 +664,72 @@ class GUI(tk.Tk):
             self.hilight(square)
         self.refresh()
 
+    def click_arrow_create(self, event,color):
+        self.canvas.unbind("<Button-3>")
+        self.canvas.unbind("<Alt-Button-3>")
+        self.canvas.unbind("<Control-Button-3>")
+        self.canvas.unbind("<Control-Alt-Button-3>")
+        self.canvas.unbind("<Button-1>")
+        current_column = event.x // self.square_size
+        current_row = 7 - (event.y // self.square_size)
+        if self.flipped:
+            current_row = 7-current_row
+            current_column = 7-current_column
+
+        self.selected_from_square = chess.square(current_column, current_row)
+        self.canvas.bind("<Motion>",lambda e:self.arrow_creating(e,color))
+        self.canvas.bind("<ButtonRelease>",lambda e:self.arrow_end(e,color))
+
+    def arrow_creating(self, event,color):
+
+        self.refresh()
+
+        current_column = event.x // self.square_size
+        current_row = 7 - (event.y // self.square_size)
+        if self.flipped:
+            current_row = 7-current_row
+            current_column = 7-current_column
+        
+        square = chess.square(current_column, current_row)
+
+        if self.selected_from_square != square:
+            self.draw_arrow(self.selected_from_square,square,comment_arrow_color.get(color))
+
+    def arrow_end(self, event,color):
+        self.canvas.unbind("<Motion>")
+        self.canvas.unbind("<ButtonRelease>")
+
+        current_column = event.x // self.square_size
+        current_row = 7 - (event.y // self.square_size)
+        if self.flipped:
+            current_row = 7-current_row
+            current_column = 7-current_column
+        
+        square = chess.square(current_column, current_row)
+
+        if self.selected_from_square != square:
+            arrows = self.pgn.arrows()
+            found = False
+            for arrow in arrows:
+                from_square = arrow.tail
+                to_square = arrow.head
+                if (from_square,to_square) == (self.selected_from_square,square):
+                    found = True
+                    arrows.remove(arrow)
+                    if arrow.color != color:
+                        arrows.append(chess.svg.Arrow(tail=self.selected_from_square,head=square,color=color))
+                    break
+            if not found:
+                arrows.append(chess.svg.Arrow(tail=self.selected_from_square,head=square,color=color))
+            self.pgn.set_arrows(arrows)
+            
+        self.refresh()
+
+        self.selected_from_square = None
+
+        self.canvas.bind("<Button-1>", self.click_edit)
+        self.canvas_bind_arrow_create()
+        
     def click_read(self, event):
 
         if len(self.pgn.variations) == 1: # Une seule variation/flèche ; où que l’on clique, le coup est joué
