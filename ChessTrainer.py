@@ -42,7 +42,7 @@ arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDD
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
 stockfish_path = "/usr/games/stockfish"
-# stockfish_path="/usr/bin/stockfish"
+# stockfish_path = "/usr/bin/stockfish"
 maxthreads = 16
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
@@ -62,6 +62,7 @@ class GUI(tk.Tk):
     analyzing=False
     analysis=None
     analyze_task = None
+    unsaved = False
 
     def __init__(self):
 
@@ -204,7 +205,7 @@ class GUI(tk.Tk):
             self.button_demote.configure(state=tk.DISABLED)
             self.button_remove.configure(state=tk.DISABLED)
 
-    def set_pgn(self):
+    def set_pgn(self,unsaved=None):
         self.chessboard = self.pgn.board()
         if self.analyzing:
             self.change_analyze()
@@ -216,9 +217,13 @@ class GUI(tk.Tk):
             self.change_comment()
             self.navbar_states()
         self.refresh()
+        if unsaved:
+            self.unsaved = True
+        elif not unsaved is None:
+            self.unsaved = False
 
     def before_new(self):
-        if askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel'):
+        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
             self.ask_new()
 
     def set_new_fen(self,f,text):
@@ -257,16 +262,17 @@ class GUI(tk.Tk):
         self.chessboard = self.pgn.board()
         self.label_filename.configure(text="")
         self.edit()
-        self.set_pgn()
+        self.set_pgn(unsaved=False)
 
     def flip(self):
         self.flipped=not(self.flipped)
         self.refresh()
 
     def load(self):
-        filename = askopenfilename(filetypes = [("PGN files","*.pgn")])
-        if filename:
-            self.do_load(filename)
+        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
+            filename = askopenfilename(filetypes = [("PGN files","*.pgn")])
+            if filename:
+                self.do_load(filename)
 
     def do_load(self,filename):
         file = open(filename)
@@ -281,7 +287,7 @@ class GUI(tk.Tk):
         self.change_game_list()
         self.read()
         self.pgn = self.pgn_games[self.pgn_index]
-        self.set_pgn()
+        self.set_pgn(unsaved=False)
 
     def change_game_list(self):
         self.sel_game_menu['menu'].delete(0,"end")
@@ -361,7 +367,7 @@ class GUI(tk.Tk):
             await asyncio.sleep(1/120)
 
     def quit_prog(self):
-        if askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel'):
+        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
             if self.analyzing:
                 self.analyzing = False
             self.wait_before_quit()
@@ -374,21 +380,21 @@ class GUI(tk.Tk):
 
     def promote_to_main(self):
         self.pgn.parent.promote_to_main(self.pgn)
-        self.set_pgn()
+        self.set_pgn(unsaved=True)
 
     def promote(self):
         self.pgn.parent.promote(self.pgn)
-        self.set_pgn()
+        self.set_pgn(unsaved=True)
 
     def demote(self):
         self.pgn.parent.demote(self.pgn)
-        self.set_pgn()
+        self.set_pgn(unsaved=True)
 
     def remove(self):
         if askokcancel("Are you sure ?","Node and variations will be lost",icon='warning',default='cancel'):
             self.pgn.parent.remove_variation(self.pgn)
             self.pgn = self.pgn.parent
-            self.set_pgn()
+            self.set_pgn(unsaved=True)
 
     def clue(self):
         self.selected_square = self.pgn.variations[0].move.from_square
@@ -481,6 +487,7 @@ class GUI(tk.Tk):
                 self.pgn.game().headers.pop(key)
         self.change_headers()
         self.destroy_change_headers(fen)
+        self.unsaved = True
 
     def edit_comment(self,event):
         if self.fen_change_comment is None:
@@ -511,6 +518,7 @@ class GUI(tk.Tk):
         self.fen_change_comment.withdraw()
         self.pgn.comment = self.text_newcomment.get(1.0,"end")[:-1]+"".join(self.pgn.comment.split("[%")[1:])
         self.change_comment()
+        self.unsaved = True
 
     def train(self):
         if self.fen_reglages is None:
@@ -669,10 +677,11 @@ class GUI(tk.Tk):
                 move=chess.Move(from_square=self.selected_square,to_square=square)
                 if self.pgn.has_variation(move):
                     self.pgn = self.pgn.variation(move)
+                    self.set_pgn()
                 else:
                     self.pgn.add_variation(move)
                     self.pgn = self.pgn.variations[-1]
-                self.set_pgn()
+                    self.set_pgn(unsaved=True)
                 if self.analyzing:
                     self.change_analyze()
             self.selected_square = None
@@ -707,7 +716,7 @@ class GUI(tk.Tk):
         if self.flipped:
             current_row = 7-current_row
             current_column = 7-current_column
-        
+
         square = chess.square(current_column, current_row)
 
         if self.selected_from_square != square:
@@ -725,7 +734,7 @@ class GUI(tk.Tk):
         if self.flipped:
             current_row = 7-current_row
             current_column = 7-current_column
-        
+
         square = chess.square(current_column, current_row)
 
         arrows = self.pgn.arrows()
@@ -742,14 +751,15 @@ class GUI(tk.Tk):
         if not found:
             arrows.append(chess.svg.Arrow(tail=self.selected_from_square,head=square,color=color))
         self.pgn.set_arrows(arrows)
-            
+        self.unsaved = True
+
         self.refresh()
 
         self.selected_from_square = None
 
         self.canvas.bind("<Button-1>", self.click_edit)
         self.canvas_bind_arrow_create()
-        
+
     def click_read(self, event):
 
         if len(self.pgn.variations) == 1: # Une seule variation/flèche ; où que l’on clique, le coup est joué
