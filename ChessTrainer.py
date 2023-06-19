@@ -35,7 +35,8 @@ import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
-from random import choice
+from random import choice,random
+from math import log2,floor
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
@@ -534,6 +535,13 @@ class GUI(tk.Tk):
             self.val_choix.set("current")
             lstbox_choix_partie=tk.OptionMenu(self.fen_reglages,self.val_choix,"current","game start","random game start")
 
+            lbl_choix_coup=tk.Label(self.fen_reglages,text="Move choice:",bg="white")
+            self.val_coup=tk.StringVar(self.fen_reglages)
+            self.val_coup.set("order dependant")
+            lstbox_choix_coup=tk.OptionMenu(self.fen_reglages,self.val_coup,"order dependant","uniform")
+
+            lbl_ligne_vide=tk.Label(self.fen_reglages,text="",bg="white")
+
             frame_action = tk.Frame(self.fen_reglages)
 
             button_go=tk.Button(frame_action,text="Let's go!",command=self.train_go)
@@ -547,6 +555,9 @@ class GUI(tk.Tk):
             lstbox_ecart.pack()
             lbl_choix_partie.pack()
             lstbox_choix_partie.pack()
+            lbl_choix_coup.pack()
+            lstbox_choix_coup.pack()
+            lbl_ligne_vide.pack()
             frame_action.pack()
         else:
             self.fen_reglages.deiconify()
@@ -575,7 +586,13 @@ class GUI(tk.Tk):
 
     def choose_move(self):
         if self.pgn.variations:
-            self.pgn = choice(self.pgn.variations)
+            if self.val_coup.get() == "uniform":
+                self.pgn = choice(self.pgn.variations)
+            elif self.val_coup.get() == "order dependant":
+                self.pgn = self.pgn.variations[min(len(self.pgn.variations)-1,
+                                                   floor(log2(1/(1-random()))))]
+            else:
+                assert False
             self.set_pgn()
             if not self.pgn.variations:
                 showinfo("The end","Back to navigation")
@@ -801,10 +818,13 @@ class GUI(tk.Tk):
 
     def draw_analyze_arrows(self,moves):
         self.canvas.delete("analyze_arrow")
-        for i,move in enumerate(moves):
+        moves.reverse() # Parcours des flèches à l’envers pour que la meilleure/première soit au-dessus
+        i=len(moves)-1
+        for move in moves:
             from_square = move.from_square
             to_square = move.to_square
             self.draw_arrow(from_square,to_square,analyze_arrow_color[i],analyze=True)
+            i-=1
 
     def draw_comment_arrows(self):
         arrows = self.pgn.arrows()
