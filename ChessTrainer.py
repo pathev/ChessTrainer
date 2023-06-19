@@ -297,9 +297,10 @@ class GUI(tk.Tk):
 
     def save(self):
         pgn_filename = asksaveasfilename(filetypes = [("PGN files","*.pgn")], defaultextension = ".pgn")
-        with open(pgn_filename, 'w') as pgn_file:
-            print(self.pgn.game(), file=pgn_file, end="\n\n")
-        self.do_load(pgn_filename)
+        if pgn_filename not in ['',()]:
+            with open(pgn_filename, 'w') as pgn_file:
+                print(self.pgn.game(), file=pgn_file, end="\n\n")
+            self.do_load(pgn_filename)
 
     async def start_analyze(self):
         self.analyzing = True
