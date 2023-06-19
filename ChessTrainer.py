@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.15
+# Version : 1.20
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
