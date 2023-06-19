@@ -35,8 +35,8 @@ import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
-from numpy import random
-from math import floor
+from random import choice
+from scipy.stats import betabinom
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
@@ -567,7 +567,7 @@ class GUI(tk.Tk):
         self.player_color = chess.WHITE if self.val_coul.get() == "white" else chess.BLACK
         self.flipped = not self.player_color
         if self.val_choix.get() == "random game start":
-            self.pgn = random.choice(self.pgn_games)
+            self.pgn = choice(self.pgn_games)
             self.pgn_index = self.pgn_games.index(self.pgn)
         elif self.val_choix.get() == "game start":
             self.pgn = self.pgn.game()
@@ -587,9 +587,9 @@ class GUI(tk.Tk):
     def choose_move(self):
         if self.pgn.variations:
             if self.val_coup.get() == "uniform":
-                self.pgn = random.choice(self.pgn.variations)
+                self.pgn = choice(self.pgn.variations)
             elif self.val_coup.get() == "order dependant":
-                self.pgn = self.pgn.variations[floor(random.beta(1,2)*len(self.pgn.variations))]
+                self.pgn = self.pgn.variations[betabinom.rvs(len(self.pgn.variations)-1,0.6,1.2)]
             else:
                 assert False
             self.set_pgn()
