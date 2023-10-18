@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.20
+# Version : 1.21 (October 2023)
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -44,6 +44,7 @@ analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
 stockfish_path = "/usr/games/stockfish"
 # stockfish_path = "/usr/bin/stockfish"
 maxthreads = 16
+maxCTdiff = 40
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 
@@ -332,7 +333,9 @@ class GUI(tk.Tk):
                         if score.is_mate():
                             await asyncio.sleep(0.5)
                         if not self.training:
-                            self.draw_analyze_arrows([info.get("pv")[0] for info in self.analysis.multipv])
+                            moves_scores_list = [(info.get("pv")[0],info.get("score").white().score()) for info in self.analysis.multipv]
+                            bs=moves_scores_list[0][1]
+                            self.draw_analyze_arrows([m for m,s in moves_scores_list if abs(s-bs)<maxCTdiff])
                 except chess.engine.AnalysisComplete:
                     break
                 except asyncio.CancelledError:
