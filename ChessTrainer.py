@@ -37,13 +37,13 @@ from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
 from random import choice
 from scipy.stats import betabinom
+import argparse
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
-stockfish_path = "/usr/games/stockfish"
-# stockfish_path = "/usr/bin/stockfish"
-maxthreads = 16
+engine_path = "/usr/games/stockfish"
+engine_max_threads = 16
 maxCTdiff = 40
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
@@ -306,8 +306,8 @@ class GUI(tk.Tk):
     async def start_analyze(self):
         self.analyzing = True
         self.button_analyze.configure(text="Stop",command=self.stop_analyze)
-        self.transport, self.engine = await chess.engine.popen_uci(stockfish_path)
-        await self.engine.configure({"Threads":maxthreads})
+        self.transport, self.engine = await chess.engine.popen_uci(engine_path)
+        await self.engine.configure({"Threads":engine_max_threads})
         while self.analyzing:
             self.changing = False
             self.analysis = await self.engine.analysis(self.chessboard,multipv=3)
@@ -962,7 +962,23 @@ class GUI(tk.Tk):
                 except:
                     pass
 
+def parse_cmd_arguments():
+    global engine_path, engine_max_threads, maxCTdiff
+    parser = argparse.ArgumentParser(prog='ChessTrainer',
+                                     description='Learn and train your chess openings')
+    parser.add_argument('--engine-path', help='Path to your engine', default=engine_path)
+    parser.add_argument('--engine-max-threads', help='Maximum number of threads used by the engine',
+                        type=int, default=engine_max_threads)
+    parser.add_argument('--max-ct-diff', help='Maximum CT (CentiPoints) diff allowed',
+                        type=int, default=maxCTdiff)
+
+    config = parser.parse_args()
+    engine_path = config.engine_path
+    engine_max_threads = config.engine_max_threads
+    maxCTdiff = config.max_ct_diff
+
 def init():
+    parse_cmd_arguments()
     window = GUI()
     window.new()
     window.mainloop()
