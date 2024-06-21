@@ -38,13 +38,14 @@ from tkinter.messagebox import askokcancel, showinfo, showerror
 from PIL import Image, ImageTk
 from random import choice
 from scipy.stats import betabinom
+import argparse
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
 engine_path = "/usr/games/stockfish"
 engine_max_threads = 16
-engine_max_ct_diff = 40
+maxCTdiff = 40
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 
@@ -962,26 +963,24 @@ class GUI(tk.Tk):
                 except:
                     pass
 
-
 def parse_cmd_arguments():
-    global engine_path, engine_max_threads, engine_max_ct_diff
+    global engine_path, engine_max_threads, maxCTdiff
+
     parser = argparse.ArgumentParser(prog='ChessTrainer',
                                      description='Learn and train your chess openings')
     parser.add_argument('--engine-path', help='Path to your engine', default=engine_path)
     parser.add_argument('--engine-max-threads', help='Maximum number of threads used by the engine',
                         type=int, default=engine_max_threads)
-    parser.add_argument('--engine-max-ct-diff', help='Maximum CT diff used by the engine',
-                        type=int, default=engine_max_ct_diff)
+    parser.add_argument('--max-ct-diff', help='Maximum CT (CentiPoints) diff allowed',
+                        type=int, default=maxCTdiff)
 
     config = parser.parse_args()
     engine_path = config.engine_path
     engine_max_threads = config.engine_max_threads
-    engine_max_ct_diff = config.engine_max_ct_diff
-
+    maxCTdiff = config.max_ct_diff
 
 def init():
     parse_cmd_arguments()
-
     window = GUI()
     window.new()
     window.mainloop()
