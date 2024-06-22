@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.21 (October 2023)
+# Version : 1.22 (June 2024)
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -23,7 +23,7 @@
 #         Patrick Thévenon          #
 #                                   #
 #       de Octobre 2021             #
-#             à Decembre 2021       #
+#             à Juin 2024           #
 #                                   #
 #####################################
 
@@ -113,14 +113,16 @@ class GUI(tk.Tk):
         self.sel_game_var.trace("w",lambda *args:self.change_game(self.sel_game_var.get()))
         self.sel_game_menu.pack(side=tk.LEFT)
 
-        self.button_fullback = tk.Button(self.navbar, text="|<", command=self.fullback,state=tk.DISABLED)
-        self.button_fullback.pack(side=tk.LEFT)
-        self.button_back = tk.Button(self.navbar, text="<", command=self.back,state=tk.DISABLED)
-        self.button_back.pack(side=tk.LEFT)
-        self.button_forward = tk.Button(self.navbar, text=">", command=self.forward,state=tk.DISABLED)
-        self.button_forward.pack(side=tk.LEFT)
-        self.button_fullforward = tk.Button(self.navbar, text=">|", command=self.fullforward,state=tk.DISABLED)
-        self.button_fullforward.pack(side=tk.LEFT)
+        media_buttons = 4*[None]
+        for i,(sym,comm) in enumerate(zip(["⏮","⏴","⏵","⏭"],
+                                          [self.fullback,self.back,self.forward,self.fullforward])):
+            media_buttons[i] = tk.Button(self.navbar,
+                                         text = sym,
+                                         font = ('Bitstream Vera Serif', 17), pady=0,state=tk.DISABLED,
+                                         command = comm)
+            media_buttons[i].pack(side=tk.LEFT)
+        self.button_fullback, self.button_back, self.button_forward, self.button_fullforward = media_buttons
+
         self.button_train = tk.Button(self.navbar, text="Train", command=self.train)
         self.button_train.pack(side=tk.RIGHT)
         self.button_edit = tk.Button(self.navbar, text="Edit", command=self.edit,state=tk.DISABLED)
@@ -138,6 +140,7 @@ class GUI(tk.Tk):
         self.button_demote.pack(side=tk.LEFT)
         self.button_remove = tk.Button(self.editbar, text="Remove", command=self.remove,state=tk.DISABLED)
         self.button_remove.pack(side=tk.LEFT)
+        # 🔗
         self.button_read = tk.Button(self.editbar, text="Read only", command=self.read)
         self.button_read.pack(side=tk.RIGHT)
 
