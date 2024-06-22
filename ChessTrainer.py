@@ -27,24 +27,26 @@
 #                                   #
 #####################################
 
-import chess
-import chess.pgn as pgn
 import asyncio
-import chess.engine
+from random import choice
+import argparse
+
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askokcancel, showinfo, showerror
+
+import chess
+from chess import pgn
+import chess.engine
 from PIL import Image, ImageTk
-from random import choice
 from scipy.stats import betabinom
-import argparse
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
 analyze_arrow_color = ["#6666FF","#9999FF","#DDDDFF"]
-engine_path = "/usr/games/stockfish"
-engine_max_threads = 16
-maxCTdiff = 40
+ENGINE_PATH = "/usr/games/stockfish"
+ENGINE_MAX_THREADS = 16
+MAX_CT_DIFF = 40
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 
@@ -75,12 +77,18 @@ class GUI(tk.Tk):
 
         self.MainFrame = tk.Frame(self)
 
-        self.MainFrame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.MainFrame.pack(side=tk.LEFT,
+                            fill=tk.BOTH,
+                            expand=True,
+                            padx=4,pady=4)
 
         self.buttons_frame = tk.Frame(self.MainFrame)
         self.buttons_frame.pack(side=tk.BOTTOM,fill=tk.X)
 
-        self.canvas = tk.Canvas(self.MainFrame, height=8*self.square_size, width=8*self.square_size,background="grey")
+        self.canvas = tk.Canvas(self.MainFrame,
+                                height=8*self.square_size,
+                                width=8*self.square_size,
+                                background="grey")
 
         self.canvas.bind("<Configure>", self.refresh)
 
@@ -88,19 +96,25 @@ class GUI(tk.Tk):
 
         self.mainbar = tk.Frame(self.buttons_frame)
 
-        self.button_quit = tk.Button(self.mainbar, text="New", command=self.before_new)
+        self.button_quit = tk.Button(self.mainbar, text="New",
+                                     command=self.before_new)
         self.button_quit.pack(side=tk.LEFT)
-        self.button_flip = tk.Button(self.mainbar, text="Flip", command=self.flip)
+        self.button_flip = tk.Button(self.mainbar, text="Flip",
+                                     command=self.flip)
         self.button_flip.pack(side=tk.LEFT)
-        self.button_load = tk.Button(self.mainbar, text="Load pgn",  command=self.load)
+        self.button_load = tk.Button(self.mainbar, text="Load pgn",
+                                     command=self.load)
         self.button_load.pack(side=tk.LEFT)
-        self.button_save = tk.Button(self.mainbar, text="Save pgn",  command=self.save)
+        self.button_save = tk.Button(self.mainbar, text="Save pgn",
+                                     command=self.save)
         self.button_save.pack(side=tk.LEFT)
-        self.button_analyze = tk.Button(self.mainbar, text="Analyze", command=lambda : asyncio.run(self.start_analyze()))
+        self.button_analyze = tk.Button(self.mainbar, text="Analyze",
+                                        command=lambda : asyncio.run(self.start_analyze()))
         self.button_analyze.pack(side=tk.LEFT)
         self.label_score = tk.Label(self.mainbar, text="")
         self.label_score.pack(side=tk.LEFT)
-        self.button_quit = tk.Button(self.mainbar, text="Quit", command=self.quit_prog)
+        self.button_quit = tk.Button(self.mainbar, text="Quit",
+                                     command=self.quit_prog)
         self.button_quit.pack(side=tk.RIGHT)
 
         self.mainbar.pack(fill=tk.X)
@@ -115,10 +129,14 @@ class GUI(tk.Tk):
 
         media_buttons = 4*[None]
         for i,(sym,comm) in enumerate(zip(["⏮","⏴","⏵","⏭"],
-                                          [self.fullback,self.back,self.forward,self.fullforward])):
+                                          [self.fullback,
+                                           self.back,
+                                           self.forward,
+                                           self.fullforward])):
             media_buttons[i] = tk.Button(self.navbar,
                                          text = sym,
-                                         font = ('Bitstream Vera Serif', 17), pady=0,state=tk.DISABLED,
+                                         font = ('Bitstream Vera Serif', 17),
+                                         pady=0,state=tk.DISABLED,
                                          command = comm)
             media_buttons[i].pack(side=tk.LEFT)
         self.button_fullback, self.button_back, self.button_forward, self.button_fullforward = media_buttons
@@ -132,16 +150,21 @@ class GUI(tk.Tk):
 
         self.editbar = tk.Frame(self.buttons_frame)
 
-        self.button_promote_to_main = tk.Button(self.editbar, text="Promote to main", command=self.promote_to_main,state=tk.DISABLED)
+        self.button_promote_to_main = tk.Button(self.editbar, text="Promote to main",
+                                                command=self.promote_to_main,state=tk.DISABLED)
         self.button_promote_to_main.pack(side=tk.LEFT)
-        self.button_promote = tk.Button(self.editbar, text="Promote", command=self.promote,state=tk.DISABLED)
+        self.button_promote = tk.Button(self.editbar, text="Promote",
+                                        command=self.promote,state=tk.DISABLED)
         self.button_promote.pack(side=tk.LEFT)
-        self.button_demote = tk.Button(self.editbar, text="Demote", command=self.demote,state=tk.DISABLED)
+        self.button_demote = tk.Button(self.editbar, text="Demote",
+                                       command=self.demote,state=tk.DISABLED)
         self.button_demote.pack(side=tk.LEFT)
-        self.button_remove = tk.Button(self.editbar, text="Remove", command=self.remove,state=tk.DISABLED)
+        self.button_remove = tk.Button(self.editbar, text="Remove",
+                                       command=self.remove,state=tk.DISABLED)
         self.button_remove.pack(side=tk.LEFT)
         # 🔗
-        self.button_read = tk.Button(self.editbar, text="Read only", command=self.read)
+        self.button_read = tk.Button(self.editbar, text="Read only",
+                                     command=self.read)
         self.button_read.pack(side=tk.RIGHT)
 
         self.trainbar = tk.Frame(self.buttons_frame)
@@ -155,13 +178,17 @@ class GUI(tk.Tk):
 
         self.label_filename = tk.Label(self.frame_infos, text="", bg="white")
         self.label_filename.pack()
-        self.text_headers = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=8)
+        self.text_headers = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
+                                    width=60,height=8)
         self.text_headers.pack()
-        self.text_fen_line = tk.Text(self.frame_infos, state=tk.DISABLED, width=60,height=2)
+        self.text_fen_line = tk.Text(self.frame_infos, state=tk.DISABLED,
+                                     width=60,height=2)
         self.text_fen_line.pack()
-        self.text_san_line = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=14)
+        self.text_san_line = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
+                                     width=60,height=14)
         self.text_san_line.pack()
-        self.text_comment = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word", width=60,height=10)
+        self.text_comment = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
+                                    width=60,height=10)
         self.text_comment.pack()
 
     def navbar_states(self):
@@ -227,7 +254,10 @@ class GUI(tk.Tk):
             self.unsaved = False
 
     def before_new(self):
-        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
+        if (self.unsaved and askokcancel("Are you sure ?",
+                                         "Unsaved pgn will be lost",
+                                         icon='warning',
+                                         default='cancel')) or not self.unsaved:
             self.ask_new()
 
     def set_new_fen(self,f,text):
@@ -249,7 +279,8 @@ class GUI(tk.Tk):
         text_fen = tk.Text(f,width=32,height=3)
         text_fen.pack()
 
-        button_OK=tk.Button(f,text="OK",command=lambda :self.set_new_fen(f,text_fen.get(1.0,"end")[:-1]))
+        button_OK=tk.Button(f,text="OK",
+                            command=lambda :self.set_new_fen(f,text_fen.get(1.0,"end")[:-1]))
         button_OK.pack()
 
     def new(self,fen=None):
@@ -269,24 +300,27 @@ class GUI(tk.Tk):
         self.set_pgn(unsaved=False)
 
     def flip(self):
-        self.flipped=not(self.flipped)
+        self.flipped = not self.flipped
         self.refresh()
 
     def load(self):
-        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
+        if (self.unsaved and askokcancel("Are you sure ?",
+                                         "Unsaved pgn will be lost",
+                                         icon='warning',
+                                         default='cancel')) or not self.unsaved:
             filename = askopenfilename(filetypes = [("PGN files","*.pgn")])
             if filename:
                 self.do_load(filename)
 
     def do_load(self,filename):
-        file = open(filename)
         filebasename=filename.split('/')[-1].split('.')[0]
         self.label_filename.configure(text=filebasename)
         self.pgn_games=[]
-        game = pgn.read_game(file)
-        while game is not None:
-            self.pgn_games.append(game)
+        with open(filename) as file:
             game = pgn.read_game(file)
+            while game is not None:
+                self.pgn_games.append(game)
+                game = pgn.read_game(file)
         self.pgn_index=0
         self.change_game_list()
         self.read()
@@ -297,10 +331,12 @@ class GUI(tk.Tk):
         self.sel_game_menu['menu'].delete(0,"end")
         for i,game in enumerate(self.pgn_games):
             v=str(i+1)+". "+game.headers["Event"]
-            self.sel_game_menu['menu'].add_command(label=v, command = lambda v=v : self.sel_game_var.set(v))
+            self.sel_game_menu['menu'].add_command(label=v,
+                                                   command = lambda v=v : self.sel_game_var.set(v))
 
     def save(self):
-        pgn_filename = asksaveasfilename(filetypes = [("PGN files","*.pgn")], defaultextension = ".pgn")
+        pgn_filename = asksaveasfilename(filetypes = [("PGN files","*.pgn")],
+                                         defaultextension = ".pgn")
         if pgn_filename not in ['',()]:
             with open(pgn_filename, 'w') as pgn_file:
                 print(self.pgn.game(), file=pgn_file, end="\n\n")
@@ -309,8 +345,8 @@ class GUI(tk.Tk):
     async def start_analyze(self):
         self.analyzing = True
         self.button_analyze.configure(text="Stop",command=self.stop_analyze)
-        self.transport, self.engine = await chess.engine.popen_uci(engine_path)
-        await self.engine.configure({"Threads":engine_max_threads})
+        self.transport, self.engine = await chess.engine.popen_uci(ENGINE_PATH)
+        await self.engine.configure({"Threads":ENGINE_MAX_THREADS})
         while self.analyzing:
             self.changing = False
             self.analysis = await self.engine.analysis(self.chessboard,multipv=3)
@@ -319,7 +355,8 @@ class GUI(tk.Tk):
         await self.engine.quit()
         self.analyze_task = None
         self.canvas.delete("analyze_arrow")
-        self.button_analyze.configure(text="Analyze",command=lambda : asyncio.run(self.start_analyze()))
+        self.button_analyze.configure(text="Analyze",
+                                      command=lambda : asyncio.run(self.start_analyze()))
         self.label_score.configure(text="")
 
     async def analyze(self):
@@ -336,9 +373,12 @@ class GUI(tk.Tk):
                         if score.is_mate():
                             await asyncio.sleep(0.5)
                         if not self.training:
-                            moves_scores_list = [(info.get("pv")[0],info.get("score").white().score()) for info in self.analysis.multipv]
+                            moves_scores_list = [(info.get("pv")[0],
+                                                  info.get("score").white().score())
+                                                 for info in self.analysis.multipv]
                             bs=moves_scores_list[0][1]
-                            self.draw_analyze_arrows([m for m,s in moves_scores_list if abs(s-bs)<maxCTdiff])
+                            self.draw_analyze_arrows([m for m,s in moves_scores_list
+                                                      if abs(s-bs)<MAX_CT_DIFF])
                 except chess.engine.AnalysisComplete:
                     break
                 except asyncio.CancelledError:
@@ -356,9 +396,8 @@ class GUI(tk.Tk):
             text += str(val/100)
             depth = str(depth)
             return text+" (dep "+depth+")"
-        else:
-            mat = str(score.mate())
-            return "Mate in "+mat
+        mat = str(score.mate())
+        return "Mate in "+mat
 
     def stop_analyze(self):
         self.analyze_task.cancel()
@@ -374,7 +413,10 @@ class GUI(tk.Tk):
             await asyncio.sleep(1/120)
 
     def quit_prog(self):
-        if (self.unsaved and askokcancel("Are you sure ?","Unsaved pgn will be lost",icon='warning',default='cancel')) or not self.unsaved:
+        if (self.unsaved and askokcancel("Are you sure ?",
+                                         "Unsaved pgn will be lost",
+                                         icon='warning',
+                                         default='cancel')) or not self.unsaved:
             if self.analyzing:
                 self.analyzing = False
             self.wait_before_quit()
@@ -398,7 +440,10 @@ class GUI(tk.Tk):
         self.set_pgn(unsaved=True)
 
     def remove(self):
-        if askokcancel("Are you sure ?","Node and variations will be lost",icon='warning',default='cancel'):
+        if askokcancel("Are you sure ?",
+                       "Node and variations will be lost",
+                       icon='warning',
+                       default='cancel'):
             self.pgn.parent.remove_variation(self.pgn)
             self.pgn = self.pgn.parent
             self.set_pgn(unsaved=True)
@@ -448,10 +493,14 @@ class GUI(tk.Tk):
         self.text_comment.bind("<Button-1>", self.edit_comment)
 
     def canvas_bind_arrow_create(self):
-        self.canvas.bind("<Button-3>", lambda e:self.click_arrow_create(e,"green"))
-        self.canvas.bind("<Alt-Button-3>", lambda e:self.click_arrow_create(e,"blue"))
-        self.canvas.bind("<Control-Button-3>", lambda e:self.click_arrow_create(e,"red"))
-        self.canvas.bind("<Control-Alt-Button-3>", lambda e:self.click_arrow_create(e,"yellow"))
+        self.canvas.bind("<Button-3>",
+                         lambda e:self.click_arrow_create(e,"green"))
+        self.canvas.bind("<Alt-Button-3>",
+                         lambda e:self.click_arrow_create(e,"blue"))
+        self.canvas.bind("<Control-Button-3>",
+                         lambda e:self.click_arrow_create(e,"red"))
+        self.canvas.bind("<Control-Alt-Button-3>",
+                         lambda e:self.click_arrow_create(e,"yellow"))
 
     def edit_headers(self,event):
         self.text_headers.unbind("<Button-1>")
@@ -474,9 +523,11 @@ class GUI(tk.Tk):
             f.pack()
         frame_action = tk.Frame(fen_change_headers)
 
-        button_go=tk.Button(frame_action,text="Change",command=lambda :self.accept_headers(fen_change_headers,text_dict))
+        button_go=tk.Button(frame_action,text="Change",
+                            command=lambda :self.accept_headers(fen_change_headers,text_dict))
         button_go.pack(side=tk.RIGHT)
-        button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.destroy_change_headers(fen_change_headers))
+        button_cancel=tk.Button(frame_action,text="Cancel",
+                                command=lambda :self.destroy_change_headers(fen_change_headers))
         button_cancel.pack(side=tk.RIGHT)
 
         frame_action.pack()
@@ -503,13 +554,16 @@ class GUI(tk.Tk):
             self.fen_change_comment.resizable(width=tk.FALSE,height=tk.FALSE)
             self.fen_change_comment.title("Comment")
             self.fen_change_comment.protocol('WM_DELETE_WINDOW',lambda :None)
-            self.text_newcomment = tk.Text(self.fen_change_comment, wrap="word", width=60,height=10)
+            self.text_newcomment = tk.Text(self.fen_change_comment, wrap="word",
+                                           width=60,height=10)
             self.text_newcomment.pack()
             frame_action = tk.Frame(self.fen_change_comment)
 
-            button_go=tk.Button(frame_action,text="Change",command=self.accept_comment)
+            button_go=tk.Button(frame_action,text="Change",
+                                command=self.accept_comment)
             button_go.pack(side=tk.RIGHT)
-            button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.fen_change_comment.withdraw())
+            button_cancel=tk.Button(frame_action,text="Cancel",
+                                    command=self.fen_change_comment.withdraw)
             button_cancel.pack(side=tk.RIGHT)
 
             frame_action.pack()
@@ -561,7 +615,7 @@ class GUI(tk.Tk):
 
             button_go=tk.Button(frame_action,text="Let's go!",command=self.train_go)
             button_go.pack(side=tk.RIGHT)
-            button_cancel=tk.Button(frame_action,text="Cancel",command=lambda :self.fen_reglages.withdraw())
+            button_cancel=tk.Button(frame_action,text="Cancel",command=self.fen_reglages.withdraw)
             button_cancel.pack(side=tk.RIGHT)
 
             lbl_coul.pack()
@@ -618,8 +672,8 @@ class GUI(tk.Tk):
             showinfo("The end","Back to navigation")
             self.stop()
 
-    def change_game(self,Event):
-        if Event != "Select game":
+    def change_game(self,event):
+        if event != "Select game":
             self.pgn_index=int(self.sel_game_var.get().split(".")[0])-1
             self.pgn = self.pgn_games[self.pgn_index]
             self.change_headers()
@@ -727,9 +781,11 @@ class GUI(tk.Tk):
         square = chess.square(current_column, current_row)
 
         if self.selected_from_square != square:
-            self.draw_arrow(self.selected_from_square,square,comment_arrow_color.get(color))
+            self.draw_arrow(self.selected_from_square,square,
+                            comment_arrow_color.get(color))
         else:
-            self.draw_arrow_square(self.selected_from_square,comment_arrow_color.get(color))
+            self.draw_arrow_square(self.selected_from_square,
+                                   comment_arrow_color.get(color))
 
 
     def arrow_end(self, event,color):
@@ -753,10 +809,12 @@ class GUI(tk.Tk):
                 found = True
                 arrows.remove(arrow)
                 if arrow.color != color:
-                    arrows.append(chess.svg.Arrow(tail=self.selected_from_square,head=square,color=color))
+                    arrows.append(chess.svg.Arrow(tail=self.selected_from_square,
+                                                  head=square,color=color))
                 break
         if not found:
-            arrows.append(chess.svg.Arrow(tail=self.selected_from_square,head=square,color=color))
+            arrows.append(chess.svg.Arrow(tail=self.selected_from_square,
+                                          head=square,color=color))
         self.pgn.set_arrows(arrows)
         self.unsaved = True
 
@@ -769,7 +827,8 @@ class GUI(tk.Tk):
 
     def click_read(self, event):
 
-        if len(self.pgn.variations) == 1: # Une seule variation/flèche ; où que l’on clique, le coup est joué
+        if len(self.pgn.variations) == 1:
+            # Une seule variation/flèche ; où que l’on clique, le coup est joué
             self.pgn = self.pgn.variations[0]
             self.set_pgn()
         else:
@@ -789,12 +848,14 @@ class GUI(tk.Tk):
                     self.pgn = self.pgn.variation(move)
                     self.set_pgn()
             else:
-                to_square_var_list = list(filter(lambda n:n.move.to_square == square,self.pgn.variations))
+                to_square_var_list = list(filter(lambda n:n.move.to_square == square,
+                                                 self.pgn.variations))
                 if len(to_square_var_list) == 1:
                     self.pgn = to_square_var_list[0]
                     self.set_pgn()
                 else:
-                    from_square_var_list=list(filter(lambda n:n.move.from_square == square,self.pgn.variations))
+                    from_square_var_list=list(filter(lambda n:n.move.from_square == square,
+                                                     self.pgn.variations))
                     if len(from_square_var_list) == 1:
                         self.pgn = from_square_var_list[0]
                         self.set_pgn()
@@ -830,7 +891,9 @@ class GUI(tk.Tk):
         piece = self.chessboard.piece_at(square)
         if piece is not None and (piece.color == self.chessboard.turn):
             self.selected_square = square
-            self.hilighted = list(map(lambda m:m.to_square, filter(lambda m:m.from_square == square,self.chessboard.legal_moves)))
+            self.hilighted = list(map(lambda m:m.to_square,
+                                      filter(lambda m:m.from_square == square,
+                                             self.chessboard.legal_moves)))
 
     def draw_analyze_arrows(self,moves):
         self.canvas.delete("analyze_arrow")
@@ -863,14 +926,16 @@ class GUI(tk.Tk):
     def draw_arrow_square(self,square,color):
         row1,col1=chess.square_rank(square),chess.square_file(square)
         if self.flipped:
-            x1 = ((7-col1) * self.square_size)
-            y1 = ((row1) * self.square_size)
+            x1 = (7-col1) * self.square_size
+            y1 = row1 * self.square_size
         else:
-            x1 = ((col1) * self.square_size)
-            y1 = ((7-row1) * self.square_size)
+            x1 = col1 * self.square_size
+            y1 = (7-row1) * self.square_size
         l=int(self.square_size*0.075)
         e=1+l//2
-        self.canvas.create_rectangle(x1+e,y1+e,x1+self.square_size-e,y1+self.square_size-e,width=l,outline=color,tags="arrow")
+        self.canvas.create_rectangle(x1+e,y1+e,
+                                     x1+self.square_size-e,y1+self.square_size-e,
+                                     width=l,outline=color,tags="arrow")
 
     def draw_arrow(self,from_square,to_square,color,analyze=False):
         row1,col1=chess.square_rank(from_square),chess.square_file(from_square)
@@ -894,7 +959,10 @@ class GUI(tk.Tk):
         elif y2<y1:
             y2+=self.square_size//8
         tags = "analyze_arrow" if analyze else "arrow"
-        self.canvas.create_line(x1,y1,x2,y2,arrow=tk.LAST,width=self.square_size//5,arrowshape=(15,12,5),fill=color,tags=tags)
+        self.canvas.create_line(x1,y1,x2,y2,
+                                arrow=tk.LAST,
+                                width=self.square_size//5,
+                                arrowshape=(15,12,5),fill=color,tags=tags)
 
     def redraw_pieces(self):
         self.icons={}
@@ -906,7 +974,7 @@ class GUI(tk.Tk):
                 x,y=7-x,7-y
             filename = "img/%s%s.png" % (chess.COLOR_NAMES[piece.color], piece.symbol().lower())
 
-            if (filename not in self.icons):
+            if filename not in self.icons:
                 self.icons[filename] = ImageTk.PhotoImage(Image.open(filename).resize((self.square_size,self.square_size)))
 
             x0 = (2*y+1) * self.square_size // 2
@@ -914,7 +982,9 @@ class GUI(tk.Tk):
             self.canvas.create_image(x0,y0, image=self.icons[filename], tags="piece", anchor="c")
         bgfile="img/black_bg.png" if self.flipped else "img/white_bg.png"
         self.icons["bg"]=ImageTk.PhotoImage(Image.open(bgfile).resize((self.square_size*8,self.square_size*8)))
-        self.canvas.create_image(4*self.square_size,4*self.square_size,image=self.icons["bg"],tags="bg",anchor="c")
+        self.canvas.create_image(4*self.square_size,4*self.square_size,
+                                 image=self.icons["bg"],
+                                 tags="bg",anchor="c")
 
     def refresh(self, event={}):
         if event:
@@ -936,23 +1006,31 @@ class GUI(tk.Tk):
             for col in range(8):
                 cur_square = chess.square(col, row)
                 if self.flipped:
-                    x1=((7-col) * self.square_size)
-                    y1 = (row * self.square_size)
+                    x1= (7-col) * self.square_size
+                    y1 = row * self.square_size
                 else:
-                    x1 = (col * self.square_size)
-                    y1 = ((7-row) * self.square_size)
+                    x1 = col * self.square_size
+                    y1 = (7-row) * self.square_size
                 x2 = x1 + self.square_size
                 y2 = y1 + self.square_size
                 if (self.selected_square is not None) and cur_square == self.selected_square:
-                    self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#D6CEFF" if color else "#B5A5FF", tags="square")
+                    self.canvas.create_rectangle(x1, y1, x2, y2,
+                                                 outline="black",
+                                                 fill="#D6CEFF" if color else "#B5A5FF", tags="square")
                 elif(self.hilighted !=[] and cur_square in self.hilighted):
-                    self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#FFFCA2" if color else "#CBCA82", tags="square")
+                    self.canvas.create_rectangle(x1, y1, x2, y2,
+                                                 outline="black",
+                                                 fill="#FFFCA2" if color else "#CBCA82", tags="square")
                 else:
-                    if cur_move is not None and (cur_square == from_square or cur_square == to_square):
-                        self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="#C8FFCE" if color else "#A0CBA5", tags="square")
+                    if cur_move is not None and (cur_square in {from_square,to_square}):
+                        self.canvas.create_rectangle(x1, y1, x2, y2,
+                                                     outline="black",
+                                                     fill="#C8FFCE" if color else "#A0CBA5", tags="square")
                     else:
-                        self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill="white" if color else "grey", tags="square")
-                color = not(color)
+                        self.canvas.create_rectangle(x1, y1, x2, y2,
+                                                     outline="black",
+                                                     fill="white" if color else "grey", tags="square")
+                color = not color
         self.redraw_pieces()
         if not self.training:
             self.draw_comment_arrows()
@@ -966,19 +1044,23 @@ class GUI(tk.Tk):
                     pass
 
 def parse_cmd_arguments():
-    global engine_path, engine_max_threads, maxCTdiff
+    global ENGINE_PATH, ENGINE_MAX_THREADS, MAX_CT_DIFF
     parser = argparse.ArgumentParser(prog='ChessTrainer',
                                      description='Learn and train your chess openings')
-    parser.add_argument('--engine-path', help='Path to your engine', default=engine_path)
-    parser.add_argument('--engine-max-threads', help='Maximum number of threads used by the engine',
-                        type=int, default=engine_max_threads)
-    parser.add_argument('--max-ct-diff', help='Maximum CT (CentiPoints) diff allowed',
-                        type=int, default=maxCTdiff)
+    parser.add_argument('--engine-path',
+                        help='Path to your engine',
+                        default=ENGINE_PATH)
+    parser.add_argument('--engine-max-threads',
+                        help='Maximum number of threads used by the engine',
+                        type=int, default=ENGINE_MAX_THREADS)
+    parser.add_argument('--max-ct-diff',
+                        help='Maximum CT (CentiPoints) diff allowed',
+                        type=int, default=MAX_CT_DIFF)
 
     config = parser.parse_args()
-    engine_path = config.engine_path
-    engine_max_threads = config.engine_max_threads
-    maxCTdiff = config.max_ct_diff
+    ENGINE_PATH = config.engine_path
+    ENGINE_MAX_THREADS = config.engine_max_threads
+    MAX_CT_DIFF = config.max_ct_diff
 
 def init():
     parse_cmd_arguments()
