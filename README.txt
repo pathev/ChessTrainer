@@ -10,6 +10,8 @@ The random choice of move from variations can be uniform, but also order dependa
 
 PGN files can be slightly edited, e.g. by adding comments and arrows with four different colors using right-clic with ctrl and/or alt keys.
 
+From version 1.3, it is possible to setup transpositions.
+
 Another program, AutoPGN, not integrated in ChessTrainer, allows to build PGN files with stockfish, possibly from a position in fen format.
 
 Both programs require the addition of the chess package created by Niklas Fiekas:
