@@ -1,0 +1,10 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+
+1. e4 e5 ( 1... d5 2. d4 e5 { [%tl 2 1] } ) 2. d4 d5 { [%cal Gg1f3] [%tp 1 2] } 3. c3 { [%cal Gc1g5] } *
+

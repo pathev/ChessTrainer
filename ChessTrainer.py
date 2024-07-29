@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.22 (June 2024)
+# Version : 1.3 (July 2024)
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -18,28 +18,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-#####################################
-#                                   #
-#         Patrick Thévenon          #
-#                                   #
-#       de Octobre 2021             #
-#             à Juin 2024           #
-#                                   #
-#####################################
+###################################
+#                                 #
+#         Patrick Thévenon        #
+#                                 #
+#       de Octobre 2021           #
+#        à Juillet 2024           #
+#                                 #
+###################################
 
 import asyncio
 from random import choice
 import argparse
+import re
 
 import tkinter as tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import askokcancel, showinfo, showerror
+from idlelib.tooltip import Hovertip
 
 import chess
 from chess import pgn
 import chess.engine
 from PIL import Image, ImageTk
 from scipy.stats import betabinom
+
+import transposition
 
 arrow_color = ["#FF3333","#FF9933","#EEEE33","#33FF33","#9933FF","#0099FF","#DDDDDD"]
 comment_arrow_color = {"red": "#AA1111", "yellow": "#AAAA11", "blue": "#1111AA", "green": "#11AA11"}
@@ -122,50 +126,85 @@ class GUI(tk.Tk):
         self.navbar = tk.Frame(self.buttons_frame)
 
         self.sel_game_var=tk.StringVar(self.fen_reglages)
-        self.sel_game_var.set("Select game")
-        self.sel_game_menu = tk.OptionMenu(self.navbar,self.sel_game_var,"Select game")
+        self.sel_game_var.set("Game")
+        self.sel_game_menu = tk.OptionMenu(self.navbar,self.sel_game_var,"Game")
         self.sel_game_var.trace("w",lambda *args:self.change_game(self.sel_game_var.get()))
         self.sel_game_menu.pack(side=tk.LEFT)
 
-        media_buttons = 4*[None]
-        for i,(sym,comm) in enumerate(zip(["⏮","⏴","⏵","⏭"],
-                                          [self.fullback,
-                                           self.back,
-                                           self.forward,
-                                           self.fullforward])):
-            media_buttons[i] = tk.Button(self.navbar,
-                                         text = sym,
-                                         font = ('Bitstream Vera Serif', 17),
-                                         pady=0,state=tk.DISABLED,
-                                         command = comm)
-            media_buttons[i].pack(side=tk.LEFT)
-        self.button_fullback, self.button_back, self.button_forward, self.button_fullforward = media_buttons
+        buttons = 6*[None]
+        for i,(sym,comm,tiptext) in enumerate(zip(["⏮","⏴","⏵","⏭","🔁","⤞"],
+                                                  [self.fullback,
+                                                   self.back,
+                                                   self.forward,
+                                                   self.fullforward,
+                                                   self.loop_transposition,
+                                                   self.to_primary_transposition],
+                                                  ['Move to first position (fullback)',
+                                                   'Move back',
+                                                   'Move forward (main variation)',
+                                                   'Move to end of main variation (fullforward)',
+                                                   'Loop through transpositions',
+                                                   'Go to primary transposition'])):
+            buttons[i] = tk.Button(self.navbar,
+                                   text = sym,
+                                   font = ('Bitstream Vera Serif', 17),
+                                   pady=0,state=tk.DISABLED,
+                                   command = comm)
+            buttons[i].pack(side=tk.LEFT)
+            Hovertip(buttons[i],tiptext, hover_delay=1000)
+
+        self.button_fullback,\
+        self.button_back,\
+        self.button_forward,\
+        self.button_fullforward,\
+        self.button_loop_transposition,\
+        self.button_to_primary_transposition\
+        = buttons
 
         self.button_train = tk.Button(self.navbar, text="Train", command=self.train)
         self.button_train.pack(side=tk.RIGHT)
-        self.button_edit = tk.Button(self.navbar, text="Edit", command=self.edit,state=tk.DISABLED)
+        self.button_edit = tk.Button(self.navbar, text="Edit", command=self.edit)#,state=tk.DISABLED)
         self.button_edit.pack(side=tk.RIGHT)
 
         self.navbar.pack(fill=tk.X)
 
         self.editbar = tk.Frame(self.buttons_frame)
-
-        self.button_promote_to_main = tk.Button(self.editbar, text="Promote to main",
+        
+        self.promotebar = tk.Frame(self.editbar)
+        self.button_promote_to_main = tk.Button(self.promotebar, text="Promote to main",
                                                 command=self.promote_to_main,state=tk.DISABLED)
         self.button_promote_to_main.pack(side=tk.LEFT)
-        self.button_promote = tk.Button(self.editbar, text="Promote",
+        self.button_promote = tk.Button(self.promotebar, text="Promote",
                                         command=self.promote,state=tk.DISABLED)
         self.button_promote.pack(side=tk.LEFT)
-        self.button_demote = tk.Button(self.editbar, text="Demote",
+        self.button_demote = tk.Button(self.promotebar, text="Demote",
                                        command=self.demote,state=tk.DISABLED)
         self.button_demote.pack(side=tk.LEFT)
-        self.button_remove = tk.Button(self.editbar, text="Remove",
+        self.button_remove = tk.Button(self.promotebar, text="Remove",
                                        command=self.remove,state=tk.DISABLED)
         self.button_remove.pack(side=tk.LEFT)
-        # 🔗
-        self.button_read = tk.Button(self.editbar, text="Read only",
-                                     command=self.read)
-        self.button_read.pack(side=tk.RIGHT)
+        self.promotebar.pack(side=tk.LEFT,fill=tk.X)
+        
+        self.transpositionbar = tk.Frame(self.editbar)
+        buttons = 2*[None]
+
+        for i,(sym,comm,tiptext) in enumerate(zip(["⚓","🔗"], # '⛏'
+                                                  [self.make_primary_transposition,
+                                                   self.link_transposition],
+                                                  ['Make this position a primary transposition',
+                                                   'Link this position to a primary transposition'])):
+            buttons[i] = tk.Button(self.transpositionbar,
+                                                 text = sym,
+                                                 font = ('Bitstream Vera Serif', 17),
+                                                 pady=0,state=tk.DISABLED,
+                                                 command = comm)
+            buttons[i].pack(side=tk.LEFT)
+            Hovertip(buttons[i],tiptext, hover_delay=1000)
+        self.button_primary_transposition,\
+        self.button_link_transposition\
+        = buttons
+        self.button_primary_transposition.configure(state=tk.NORMAL)
+        self.transpositionbar.pack(side=tk.RIGHT,fill=tk.X)
 
         self.trainbar = tk.Frame(self.buttons_frame)
 
@@ -206,6 +245,18 @@ class GUI(tk.Tk):
             self.button_train.configure(state=tk.NORMAL)
             self.button_back.configure(state=tk.NORMAL)
             self.button_fullback.configure(state=tk.NORMAL)
+        
+        if transposition.check_transposition(self.pgn):
+            self.button_loop_transposition.configure(state=tk.NORMAL,
+                                                     bg='green')
+            if transposition.check_secondary(self.pgn):
+                self.button_to_primary_transposition.configure(state=tk.NORMAL)
+            else:
+                self.button_to_primary_transposition.configure(state=tk.DISABLED)
+        else:
+            self.button_loop_transposition.configure(state=tk.DISABLED,
+                                                     bg=tk.Button().cget('bg'))
+            self.button_to_primary_transposition.configure(state=tk.DISABLED)
 
         self.text_headers.configure(state=tk.NORMAL)
         self.text_headers.delete(1.0,"end")
@@ -235,6 +286,34 @@ class GUI(tk.Tk):
             self.button_promote.configure(state=tk.DISABLED)
             self.button_demote.configure(state=tk.DISABLED)
             self.button_remove.configure(state=tk.DISABLED)
+        
+        if not transposition.check_transposition(self.pgn):
+            self.button_primary_transposition.configure(text='⚓',
+                                                        activebackground=tk.Button().cget('activebackground'),
+                                                        command=self.make_primary_transposition)
+            Hovertip(self.button_primary_transposition,
+                     'Make this position a primary transposition',
+                     hover_delay=1000)
+            if transposition.noeud_transposition != {} and not self.pgn.variations:
+                self.button_link_transposition.configure(state=tk.NORMAL)
+            else:
+                self.button_link_transposition.configure(state=tk.DISABLED)
+        else:
+            if transposition.check_primary(self.pgn):
+                self.button_primary_transposition.configure(text='⛏',
+                                                            activebackground='red',
+                                                            command=self.remove_primary_transposition)
+                Hovertip(self.button_primary_transposition,
+                         'Remove this primary transposition and its secondary ones',
+                         hover_delay=1000)
+            else:
+                self.button_primary_transposition.configure(text='⇄',
+                                                            activebackground='yellow',
+                                                            command=self.exchange_primary_transposition)
+                Hovertip(self.button_primary_transposition,
+                         'Exchange this secondary transposition with its primary one',
+                         hover_delay=1000)
+            self.button_link_transposition.configure(state=tk.DISABLED)
 
     def set_pgn(self,unsaved=None):
         self.chessboard = self.pgn.board()
@@ -252,6 +331,15 @@ class GUI(tk.Tk):
             self.unsaved = True
         elif not unsaved is None:
             self.unsaved = False
+        if self.editing:
+            if transposition.check_secondary(self.pgn):
+                self.canvas.unbind("<Button-1>")
+                self.canvas_unbind_arrow_create()
+                self.text_comment.unbind("<Button-1>")
+            else:
+                self.canvas.bind("<Button-1>", self.click_edit)
+                self.canvas_bind_arrow_create()
+                self.text_comment.bind("<Button-1>", self.edit_comment)
 
     def before_new(self):
         if (self.unsaved and askokcancel("Are you sure ?",
@@ -326,6 +414,7 @@ class GUI(tk.Tk):
         self.read()
         self.pgn = self.pgn_games[self.pgn_index]
         self.set_pgn(unsaved=False)
+        transposition.init(self.pgn)
 
     def change_game_list(self):
         self.sel_game_menu['menu'].delete(0,"end")
@@ -466,12 +555,8 @@ class GUI(tk.Tk):
     def read(self):
         self.editing = False
         self.editbar.pack_forget()
-        self.button_edit.configure(state=tk.NORMAL)
-        self.canvas.unbind("<Button-1>")
-        self.canvas.unbind("<Button-3>")
-        self.canvas.unbind("<Alt-Button-3>")
-        self.canvas.unbind("<Control-Button-3>")
-        self.canvas.unbind("<Control-Alt-Button-3>")
+        self.button_edit.configure(command=self.edit,text="Edit")
+        self.canvas_unbind_arrow_create()
         self.canvas.bind("<Button-1>", self.click_read)
         self.text_comment.unbind("<Button-1>")
         self.text_headers.unbind("<Button-1>")
@@ -481,16 +566,14 @@ class GUI(tk.Tk):
         self.editbar.pack(fill=tk.X)
         self.frame_infos.pack(side=tk.LEFT,fill=tk.Y)
         self.editing = True
-        self.button_edit.configure(state=tk.DISABLED)
+        self.button_edit.configure(command=self.read,text="Read only")
         self.editbar.pack(fill=tk.X)
         self.editbar_states()
-        self.canvas.unbind("<Button-1>")
         self.canvas.bind("<Button-1>", self.click_edit)
         self.canvas_bind_arrow_create()
-        self.text_headers.unbind("<Button-1>")
         self.text_headers.bind("<Button-1>", self.edit_headers)
-        self.text_comment.unbind("<Button-1>")
         self.text_comment.bind("<Button-1>", self.edit_comment)
+
 
     def canvas_bind_arrow_create(self):
         self.canvas.bind("<Button-3>",
@@ -501,6 +584,13 @@ class GUI(tk.Tk):
                          lambda e:self.click_arrow_create(e,"red"))
         self.canvas.bind("<Control-Alt-Button-3>",
                          lambda e:self.click_arrow_create(e,"yellow"))
+    
+    def canvas_unbind_arrow_create(self):
+        self.canvas.unbind("<Button-3>")
+        self.canvas.unbind("<Alt-Button-3>")
+        self.canvas.unbind("<Control-Button-3>")
+        self.canvas.unbind("<Control-Alt-Button-3>")
+
 
     def edit_headers(self,event):
         self.text_headers.unbind("<Button-1>")
@@ -570,14 +660,15 @@ class GUI(tk.Tk):
         else:
             self.fen_change_comment.deiconify()
         self.text_newcomment.delete(1.0,"end")
-        self.text_newcomment.insert("end",self.pgn.comment.split("[%")[0])
+        self.text_newcomment.insert("end",''.join(re.split(r'\[%[^\]]*\]', self.pgn.comment)))
         self.text_newcomment.wait_visibility()
         self.text_newcomment.mark_set(tk.INSERT,self.text_newcomment.index("end"))
         self.text_newcomment.focus_set()
 
     def accept_comment(self):
         self.fen_change_comment.withdraw()
-        self.pgn.comment = self.text_newcomment.get(1.0,"end")[:-1]+"".join(self.pgn.comment.split("[%")[1:])
+        self.pgn.comment = self.text_newcomment.get(1.0,"end")[:-1]+\
+                           ''.join(re.findall(r'\[%[^\]]*\]',self.pgn.comment))
         self.change_comment()
         self.unsaved = True
 
@@ -673,12 +764,12 @@ class GUI(tk.Tk):
             self.stop()
 
     def change_game(self,event):
-        if event != "Select game":
+        if event != "Game":
             self.pgn_index=int(self.sel_game_var.get().split(".")[0])-1
             self.pgn = self.pgn_games[self.pgn_index]
             self.change_headers()
             self.set_pgn()
-            self.sel_game_var.set("Select game")
+            self.sel_game_var.set("Game")
             self.sel_game_menu.event_generate("<Enter>") #
             self.sel_game_menu.event_generate("<Leave>") # Pas trouvé comment faire mieux
 
@@ -721,7 +812,7 @@ class GUI(tk.Tk):
     def change_comment(self):
         self.text_comment.configure(state=tk.NORMAL)
         self.text_comment.delete(1.0,"end")
-        self.text_comment.insert("end",self.pgn.comment.split("[%")[0])
+        self.text_comment.insert("end",''.join(re.split(r'\[%[^\]]*\]', self.pgn.comment)))
         self.text_comment.configure(state=tk.DISABLED)
 
     def click_edit(self, event):
@@ -752,11 +843,8 @@ class GUI(tk.Tk):
         self.refresh()
 
     def click_arrow_create(self, event,color):
-        self.canvas.unbind("<Button-3>")
-        self.canvas.unbind("<Alt-Button-3>")
-        self.canvas.unbind("<Control-Button-3>")
-        self.canvas.unbind("<Control-Alt-Button-3>")
         self.canvas.unbind("<Button-1>")
+        self.canvas_unbind_arrow_create()
         current_column = event.x // self.square_size
         current_row = 7 - (event.y // self.square_size)
         if self.flipped:
@@ -985,6 +1073,39 @@ class GUI(tk.Tk):
         self.canvas.create_image(4*self.square_size,4*self.square_size,
                                  image=self.icons["bg"],
                                  tags="bg",anchor="c")
+
+    def make_primary_transposition(self):
+        transposition.make_primary(self.pgn)
+        self.set_pgn()
+    
+    def remove_primary_transposition(self):
+        if askokcancel("Are you sure ?",
+                       "All linked transpositions will be removed too",
+                       icon='warning',
+                       default='cancel'):
+            transposition.remove_primary(self.pgn)
+            self.set_pgn()
+
+    def exchange_primary_transposition(self):
+        transposition.exchange_with_primary(self.pgn)
+        self.set_pgn()
+
+    def link_transposition(self):
+        transposition.link(self.pgn)
+        self.set_pgn()
+    
+    def loop_transposition(self):
+        pgn = transposition.after(self.pgn)
+        if not pgn is None:
+            self.pgn = pgn
+            self.set_pgn()
+    
+    def to_primary_transposition(self):
+        pgn = transposition.get_primary_from_secondary_node(self.pgn)
+        if not pgn is None:
+            self.pgn = pgn
+            self.set_pgn()
+
 
     def refresh(self, event={}):
         if event:
