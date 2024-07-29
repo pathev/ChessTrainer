@@ -47,6 +47,10 @@ def check_primary(pgn):
             return p in transpositions_secondaires
     return False
 
+def isolate_primary(pgn):
+    p = get_number_from_node(pgn)
+    return transpositions_secondaires[p] == []
+
 def add_secondary_comment(p,s):
     pgn = noeud_transposition[p]
     comment = TPRE.sub('',pgn.comment)
@@ -132,9 +136,7 @@ def exchange_with_primary(pgn):
     transposition_primaire[p]=s
     transpositions_secondaires[s]=sl
     pgn_p = noeud_transposition[p]
-    print("comment of p before transfert",pgn_p.comment)
     transfert(pgn_p,pgn)
-    print("comment of p after transfert",pgn_p.comment)
     pgn_p.comment = f"[%tl {p} {s}]"
     comment = TPRE.sub('',pgn.comment)
     pgn.comment = comment + f" [%tp {" ".join(map(str,[s]+transpositions_secondaires[s]))}]"
@@ -150,6 +152,10 @@ def link(pgn):
         if noeud_transposition[p].board().fen() == fen:
             set_secondary_new(pgn,p)
             break
+    comment = TLRE.sub('',pgn.comment)
+    if pgn.variations != [] or comment !='':
+        pgn_p = noeud_transposition[p]
+        transfert(pgn, pgn_p)
 
 def after(pgn):
     if check_primary(pgn):
@@ -175,7 +181,6 @@ def recursive_copy(initial,final):
     # Tests selon primaire/secondaire ?
     # Il faut redonner les bons noeuds s’ils sont refaits
     # Et attention aux commentaires... un noeud ne peut pas être plusieurs transpositions
-    print("again, initial comment",initial.comment," | final comment",final.comment)
     final.comment += initial.comment
     for child in initial.variations:
         move = child.move
@@ -193,9 +198,7 @@ def recursive_copy(initial,final):
 def transfert(initial,final):
     assert check_secondary(initial)
     assert check_primary(final)
-    print("initial comment",initial.comment," | final comment",final.comment)
     initial.comment = TLRE.sub('',initial.comment)
-    print("new initial comment",initial.comment)
     recursive_copy(initial,final)
     s = get_number_from_node(initial)
     p = get_number_from_node(final)

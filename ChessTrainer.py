@@ -192,7 +192,7 @@ class GUI(tk.Tk):
                                                   [self.make_primary_transposition,
                                                    self.link_transposition],
                                                   ['Make this position a primary transposition',
-                                                   'Link this position to a primary transposition'])):
+                                                   'Try to link this position to a primary transposition'])):
             buttons[i] = tk.Button(self.transpositionbar,
                                                  text = sym,
                                                  font = ('Bitstream Vera Serif', 17),
@@ -294,7 +294,7 @@ class GUI(tk.Tk):
             Hovertip(self.button_primary_transposition,
                      'Make this position a primary transposition',
                      hover_delay=1000)
-            if transposition.noeud_transposition != {} and not self.pgn.variations:
+            if transposition.noeud_transposition != {}:
                 self.button_link_transposition.configure(state=tk.NORMAL)
             else:
                 self.button_link_transposition.configure(state=tk.DISABLED)
@@ -1079,10 +1079,11 @@ class GUI(tk.Tk):
         self.set_pgn()
     
     def remove_primary_transposition(self):
-        if askokcancel("Are you sure ?",
-                       "All linked transpositions will be removed too",
-                       icon='warning',
-                       default='cancel'):
+        if transposition.isolate_primary(self.pgn)\
+           or askokcancel("Are you sure ?",
+                          "All linked transpositions will be removed too",
+                          icon='warning',
+                          default='cancel'):
             transposition.remove_primary(self.pgn)
             self.set_pgn()
 
