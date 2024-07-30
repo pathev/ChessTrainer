@@ -1,17 +1,6 @@
-Transpositions :
-Tout nœud créé est principal (si on ne lui trouve pas d’identique) avec transpositions = []
-Si un nœud créé est une transposition, alors transposition, le créer comme transposition du nœud principal
-Quand on supprime, chercher les éventuels nœuds secondaires et nœuds à transpositions (empêcher de supprimer si c’est le cas) des nœuds supprimés.
-Bouton principal pour RENDRE principal (donc grisé quand il l'est déjà)
-Rotation grisée si le nœud est principal et sans transpositions
-
-PAS SAUVEGARDABLE EN L'ÉTAT !
-Pour cela, utiliser les commentaires, avec un tag : [%tp i] (transposition primaire) [%tl i] (transposition secondaire (lien))
-
 Suggestions :
-* Faire des liens entre nœuds du fichier, voire entre fichiers pgn (pas d'idée pour les mettre en place)
+* Faire des liens entre fichiers pgn (pas d'idée pour les mettre en place)
 * Permettre les annotations de coups (nags : ! ? ?? !? ?! ...)
-* Permettre d’insérer des pgn comme nœud à une position donnée.
 * Faire jouer des parties différentes lors de l’entraînement (comment ?)
 Problèmes à (mieux) régler :
 * L’arrêt quand l’analyse détecte un mat (géré par un break sur un mat 0 et des sleep pour les autres).
