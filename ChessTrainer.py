@@ -467,7 +467,7 @@ class GUI(tk.Tk):
                                                  for info in self.analysis.multipv]
                             bs=moves_scores_list[0][1]
                             self.draw_analyze_arrows([m for m,s in moves_scores_list
-                                                      if abs(s-bs)<MAX_CT_DIFF])
+                                                      if bs is None or s is None or abs(s-bs)<MAX_CT_DIFF])
                 except chess.engine.AnalysisComplete:
                     break
                 except asyncio.CancelledError:
@@ -1120,6 +1120,7 @@ class GUI(tk.Tk):
         except IndexError:
             cur_move=None
 
+        self.canvas.delete("analyze_arrow")
         self.canvas.delete("square")
         self.canvas.delete("arrow")
         color = chess.WHITE
