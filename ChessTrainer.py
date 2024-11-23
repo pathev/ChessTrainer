@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Version : 1.3 (July 2024)
+# Version : 1.4 (November 2024)
 #
 # ChessTrainer (c) by Patrick Thévenon
 #
@@ -18,14 +18,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-###################################
-#                                 #
-#         Patrick Thévenon        #
-#                                 #
-#       de Octobre 2021           #
-#        à Juillet 2024           #
-#                                 #
-###################################
+##################################
+#                                #
+#        Patrick Thévenon        #
+#                                #
+#      Oct 2021 -> Nov 2024      #
+#                                #
+##################################
 
 import asyncio
 from random import choice
@@ -70,21 +69,43 @@ class GUI(tk.Tk):
     analysis=None
     analyze_task = None
     unsaved = False
+    pgn_index = 0
 
     def __init__(self):
 
         tk.Tk.__init__(self)
 
-        self.title("Opening trainer")
-        self.minsize(470,250)
+        self.title("ChessTrainer : a chess opening trainer")
+        self.minsize(800,608)
         self.protocol('WM_DELETE_WINDOW',self.quit_prog)
 
-        self.MainFrame = tk.Frame(self)
+        self.menubar = tk.Menu(self)
+        self.config(menu=self.menubar)
 
-        self.MainFrame.pack(side=tk.LEFT,
-                            fill=tk.BOTH,
-                            expand=True,
-                            padx=4,pady=4)
+        self.file_menu = tk.Menu(self.menubar,tearoff=0)
+        self.menubar.add_cascade(label="File", menu=self.file_menu)
+        
+        self.file_menu.add_command(label="New",command=self.before_new_file)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Open",command=self.load)
+        self.file_menu.add_command(label="Save",command=self.save)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Quit",
+                                   command=self.quit_prog,
+                                   activebackground='red')
+
+        self.game_menu = tk.Menu(self.menubar,tearoff=0)
+        self.menubar.add_cascade(label= "Game", menu=self.game_menu)
+        
+        self.game_menu.add_command(label="1.",command=lambda :self.change_game(1))
+        self.game_menu.entryconfig("1.", state='disabled')
+        self.game_menu.add_command(label="New one",command=lambda :self.ask_new_fen(self.new_game))
+        
+        self.vert_sep = tk.PanedWindow(self, orient="horizontal")
+        self.vert_sep.pack(fill="both", expand=True)
+
+        self.MainFrame = tk.Frame(self.vert_sep,bg="white",width=470)
+        self.frame_infos = tk.Frame(self.vert_sep,bg="white")
 
         self.buttons_frame = tk.Frame(self.MainFrame)
         self.buttons_frame.pack(side=tk.BOTTOM,fill=tk.X)
@@ -100,36 +121,20 @@ class GUI(tk.Tk):
 
         self.mainbar = tk.Frame(self.buttons_frame)
 
-        self.button_quit = tk.Button(self.mainbar, text="New",
-                                     command=self.before_new)
-        self.button_quit.pack(side=tk.LEFT)
-        self.button_flip = tk.Button(self.mainbar, text="Flip",
-                                     command=self.flip)
-        self.button_flip.pack(side=tk.LEFT)
-        self.button_load = tk.Button(self.mainbar, text="Load pgn",
-                                     command=self.load)
-        self.button_load.pack(side=tk.LEFT)
-        self.button_save = tk.Button(self.mainbar, text="Save pgn",
-                                     command=self.save)
-        self.button_save.pack(side=tk.LEFT)
-        self.button_analyze = tk.Button(self.mainbar, text="Analyze",
+        self.button_analyze = tk.Button(self.mainbar, text="Analyze",width=6,
                                         command=lambda : asyncio.run(self.start_analyze()))
         self.button_analyze.pack(side=tk.LEFT)
         self.label_score = tk.Label(self.mainbar, text="")
         self.label_score.pack(side=tk.LEFT)
-        self.button_quit = tk.Button(self.mainbar, text="Quit",
-                                     command=self.quit_prog)
-        self.button_quit.pack(side=tk.RIGHT)
+
+        self.button_flip = tk.Button(self.mainbar, text="Flip",
+                                     command=self.flip)
+        self.button_flip.pack(side=tk.RIGHT)
+
 
         self.mainbar.pack(fill=tk.X)
 
         self.navbar = tk.Frame(self.buttons_frame)
-
-        self.sel_game_var=tk.StringVar(self.fen_reglages)
-        self.sel_game_var.set("Game")
-        self.sel_game_menu = tk.OptionMenu(self.navbar,self.sel_game_var,"Game")
-        self.sel_game_var.trace("w",lambda *args:self.change_game(self.sel_game_var.get()))
-        self.sel_game_menu.pack(side=tk.LEFT)
 
         buttons = 6*[None]
         for i,(sym,comm,tiptext) in enumerate(zip(["⏮","⏴","⏵","⏭","🔁","⤞"],
@@ -213,39 +218,54 @@ class GUI(tk.Tk):
         self.button_stop = tk.Button(self.trainbar, text="Stop", command=self.stop)
         self.button_stop.pack(side=tk.RIGHT)
 
-        self.frame_infos = tk.Frame(master=self,bg="white")
-
         self.label_filename = tk.Label(self.frame_infos, text="", bg="white")
-        self.label_filename.pack()
-        self.text_headers = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
-                                    width=60,height=8)
-        self.text_headers.pack()
-        self.text_fen_line = tk.Text(self.frame_infos, state=tk.DISABLED,
-                                     width=60,height=2)
-        self.text_fen_line.pack()
-        self.text_san_line = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
-                                     width=60,height=14)
-        self.text_san_line.pack()
-        self.text_comment = tk.Text(self.frame_infos, state=tk.DISABLED, wrap="word",
-                                    width=60,height=10)
-        self.text_comment.pack()
+        self.label_filename.pack(fill="both")
+        self.text_headers = tk.Text(self.frame_infos,width=50,
+                                    state=tk.DISABLED, wrap="word",height=7)
+        self.text_headers.pack(fill="both")
+        self.text_fen_line = tk.Text(self.frame_infos,width=50,
+                                     state=tk.DISABLED,height=2)
+        self.text_fen_line.pack(fill="both")
 
+        self.hor_sep = tk.PanedWindow(self.frame_infos,orient="vertical")
+        self.hor_sep.pack(fill="both",expand=True)
+
+        self.text_san_line = tk.Text(self.hor_sep,
+                                     height=8,width=50,
+                                     state=tk.DISABLED, wrap="word")
+        self.text_comment = tk.Text(self.hor_sep,
+                                    heigh=20,width=50,
+                                    state=tk.DISABLED, wrap="word")
+
+        self.hor_sep.add(self.text_san_line,minsize=50)
+        self.hor_sep.add(self.text_comment,minsize=50)
+
+        self.vert_sep.add(self.MainFrame,minsize=470)
+        self.vert_sep.add(self.frame_infos,minsize=300)
+        
+    def unsaved_state(self):
+        if not self.unsaved:
+            self.unsaved = True
+            self.file_menu.entryconfig("Save", state='normal')
+        
     def navbar_states(self):
         if self.pgn.parent is None:
             self.button_back.configure(state=tk.DISABLED)
             self.button_fullback.configure(state=tk.DISABLED)
             if self.pgn.variations:
-                self.button_save.configure(state=tk.NORMAL)
                 self.button_train.configure(state=tk.NORMAL)
             else:
-                self.button_save.configure(state=tk.DISABLED)
                 self.button_train.configure(state=tk.DISABLED)
         else:
-            self.button_save.configure(state=tk.NORMAL)
             self.button_train.configure(state=tk.NORMAL)
             self.button_back.configure(state=tk.NORMAL)
             self.button_fullback.configure(state=tk.NORMAL)
         
+        if self.unsaved:
+            self.file_menu.entryconfig("Save", state='normal')
+        else:
+            self.file_menu.entryconfig("Save", state='disabled')
+
         if transposition.check_transposition(self.pgn):
             self.button_loop_transposition.configure(state=tk.NORMAL,
                                                      bg='green')
@@ -317,6 +337,10 @@ class GUI(tk.Tk):
 
     def set_pgn(self,unsaved=None):
         self.chessboard = self.pgn.board()
+        if unsaved:
+            self.unsaved = True
+        elif not unsaved is None:
+            self.unsaved = False
         if self.analyzing:
             self.change_analyze()
         if self.editing:
@@ -327,10 +351,6 @@ class GUI(tk.Tk):
             self.change_comment()
             self.navbar_states()
         self.refresh()
-        if unsaved:
-            self.unsaved = True
-        elif not unsaved is None:
-            self.unsaved = False
         if self.editing:
             if transposition.check_secondary(self.pgn):
                 self.canvas.unbind("<Button-1>")
@@ -341,43 +361,48 @@ class GUI(tk.Tk):
                 self.canvas_bind_arrow_create()
                 self.text_comment.bind("<Button-1>", self.edit_comment)
 
-    def before_new(self):
+    def before_new_file(self):
         if (self.unsaved and askokcancel("Are you sure ?",
                                          "Unsaved pgn will be lost",
                                          icon='warning',
                                          default='cancel')) or not self.unsaved:
-            self.ask_new()
+            self.ask_new_fen(self.new_file)
 
-    def set_new_fen(self,f,text):
-        f.destroy()
-        if text == "":
-            self.new()
-        else:
-            self.new(fen=text)
+    def close_and_action(self,w,fun,fen):
+        w.destroy()
+        fun(fen=fen)
 
-    def ask_new(self):
-        f = tk.Toplevel(master=self,bg="white")
-        f.transient(self)
-        f.resizable(width=tk.FALSE,height=tk.FALSE)
-        f.title("New PGN")
-        f.protocol('WM_DELETE_WINDOW',lambda :None)
+    def ask_new_fen(self,fun):
+        w = tk.Toplevel(master=self,bg="white")
+        w.transient(self)
+        w.resizable(width=tk.FALSE,height=tk.FALSE)
+        w.title("New PGN")
+        w.protocol('WM_DELETE_WINDOW',lambda :None)
 
-        l = tk.Label(f,text="Give the FEN (empty for default one)",bg="white",width=30)
+        l = tk.Label(w,text="Give the FEN (empty for default one)",
+                     bg="white",width=30)
         l.pack()
-        text_fen = tk.Text(f,width=32,height=3)
+        text_fen = tk.Text(w,width=32,height=3)
         text_fen.pack()
 
-        button_OK=tk.Button(f,text="OK",
-                            command=lambda :self.set_new_fen(f,text_fen.get(1.0,"end")[:-1]))
+        button_OK=tk.Button(w,text="OK",
+                            command=lambda :\
+                                self.close_and_action(
+                                    w,
+                                    fun,
+                                    text_fen.get(1.0,"end")[:-1]))
         button_OK.pack()
 
-    def new(self,fen=None):
+    def new_file(self,fen=""):
         self.pgn=pgn.Game()
-        if fen is not None:
+        if fen:
             try:
                 self.pgn.setup(fen)
+                self.unsaved = True
             except:
                 showerror("Error","invalid FEN")
+        else:
+            self.unsaved = False
         self.pgn_games=[self.pgn.game()]
         self.pgn_index=0
         self.change_game_list()
@@ -385,7 +410,7 @@ class GUI(tk.Tk):
         self.chessboard = self.pgn.board()
         self.label_filename.configure(text="")
         self.edit()
-        self.set_pgn(unsaved=False)
+        self.set_pgn()
 
     def flip(self):
         self.flipped = not self.flipped
@@ -417,19 +442,29 @@ class GUI(tk.Tk):
         transposition.init(self.pgn)
 
     def change_game_list(self):
-        self.sel_game_menu['menu'].delete(0,"end")
-        for i,game in enumerate(self.pgn_games):
-            v=str(i+1)+". "+game.headers["Event"]
-            self.sel_game_menu['menu'].add_command(label=v,
-                                                   command = lambda v=v : self.sel_game_var.set(v))
+        self.game_menu.delete(0,tk.END)
+        for i,game in enumerate(self.pgn_games,start=1):
+            v=f"{i}. {game.headers['Event']}"
+            self.game_menu.add_command(label=v,
+                                       command=lambda i=i:self.change_game(i))
+        self.game_menu.add_separator()
+        self.game_menu.add_command(label="New one",command=lambda :self.ask_new_fen(self.new_game))
+        if len(self.pgn_games) > 1:
+            self.game_menu.add_separator()
+            self.game_menu.add_command(label="Delete",
+                                       command=self.del_game,
+                                       activebackground='red')
+        self.game_menu.entryconfigure(self.pgn_index,state='disabled')
 
     def save(self):
         pgn_filename = asksaveasfilename(filetypes = [("PGN files","*.pgn")],
                                          defaultextension = ".pgn")
         if pgn_filename not in ['',()]:
             with open(pgn_filename, 'w') as pgn_file:
-                print(self.pgn.game(), file=pgn_file, end="\n\n")
-            self.do_load(pgn_filename)
+                for game in self.pgn_games:
+                    print(game, file=pgn_file, end="\n\n")
+        self.unsaved = False
+        self.file_menu.entryconfig("Save", state='disabled')
 
     async def start_analyze(self):
         self.analyzing = True
@@ -508,7 +543,7 @@ class GUI(tk.Tk):
                                          default='cancel')) or not self.unsaved:
             if self.analyzing:
                 self.analyzing = False
-            self.wait_before_quit()
+            self.after(10,self.wait_before_quit)
 
     def wait_before_quit(self):
         if self.analysis is not None:
@@ -564,7 +599,7 @@ class GUI(tk.Tk):
     def edit(self):
         self.navbar.pack(fill=tk.X)
         self.editbar.pack(fill=tk.X)
-        self.frame_infos.pack(side=tk.LEFT,fill=tk.Y)
+        self.vert_sep.add(self.frame_infos,minsize=300)
         self.editing = True
         self.button_edit.configure(command=self.read,text="Read only")
         self.editbar.pack(fill=tk.X)
@@ -606,7 +641,7 @@ class GUI(tk.Tk):
             f = tk.Frame(fen_change_headers)
             l = tk.Label(f,text=key,bg="white",width=10)
             l.pack(side=tk.LEFT)
-            t = tk.Text(f,height=1,width=60)
+            t = tk.Entry(f,width=60)
             text_dict[key]=t
             t.insert("end",value)
             t.pack(side=tk.LEFT)
@@ -628,14 +663,15 @@ class GUI(tk.Tk):
 
     def accept_headers(self,fen,text_dict):
         for key in text_dict:
-            text=text_dict[key].get(1.0,"end")[:-1]
+            text=text_dict[key].get()
             if text !="":
                 self.pgn.game().headers[key] = text
             else:
                 self.pgn.game().headers.pop(key)
         self.change_headers()
         self.destroy_change_headers(fen)
-        self.unsaved = True
+        self.unsaved_state()
+        self.change_game_list()
 
     def edit_comment(self,event):
         if self.fen_change_comment is None:
@@ -645,7 +681,7 @@ class GUI(tk.Tk):
             self.fen_change_comment.title("Comment")
             self.fen_change_comment.protocol('WM_DELETE_WINDOW',lambda :None)
             self.text_newcomment = tk.Text(self.fen_change_comment, wrap="word",
-                                           width=60,height=10)
+                                           height=10)
             self.text_newcomment.pack()
             frame_action = tk.Frame(self.fen_change_comment)
 
@@ -670,7 +706,7 @@ class GUI(tk.Tk):
         self.pgn.comment = self.text_newcomment.get(1.0,"end")[:-1]+\
                            ''.join(re.findall(r'\[%[^\]]*\]',self.pgn.comment))
         self.change_comment()
-        self.unsaved = True
+        self.unsaved_state()
 
     def train(self):
         if self.fen_reglages is None:
@@ -733,7 +769,7 @@ class GUI(tk.Tk):
             self.pgn = self.pgn.game()
         self.editbar.pack_forget()
         self.navbar.pack_forget()
-        self.frame_infos.pack_forget()
+        self.vert_sep.remove(self.frame_infos)
         self.trainbar.pack(fill=tk.X)
         self.canvas.unbind("<Button-1>")
         self.canvas.bind("<Button-1>",self.click_train)
@@ -763,15 +799,47 @@ class GUI(tk.Tk):
             showinfo("The end","Back to navigation")
             self.stop()
 
-    def change_game(self,event):
-        if event != "Game":
-            self.pgn_index=int(self.sel_game_var.get().split(".")[0])-1
-            self.pgn = self.pgn_games[self.pgn_index]
-            self.change_headers()
-            self.set_pgn()
-            self.sel_game_var.set("Game")
-            self.sel_game_menu.event_generate("<Enter>") #
-            self.sel_game_menu.event_generate("<Leave>") # Pas trouvé comment faire mieux
+    def change_game(self,n):
+        self.game_menu.entryconfigure(self.pgn_index, state='normal')
+        i = self.pgn_index = n-1
+        self.pgn = self.pgn_games[i]
+        self.change_headers()
+        self.game_menu.entryconfigure(i, state='disabled')
+        self.set_pgn()
+    
+    def new_game(self,fen=""):
+        self.pgn = pgn.Game()
+        if fen:
+            try:
+                self.pgn.setup(fen)
+            except:
+                showerror("Error","invalid FEN")
+        self.pgn_games.append(self.pgn)
+        self.change_game_list()
+        self.change_game(len(self.pgn_games))
+        self.unsaved_state()
+ 
+    def del_game(self):
+        if self.unsaved:
+            if askokcancel("Are you sure ?",
+                           "This game line will be lost\n"
+                           "(and the file has not been saved)",
+                           icon='warning',
+                           default='cancel'):
+                self.do_del_game()
+        else:
+            if askokcancel("Are you sure ?",
+                           "This game line will be lost",
+                           icon='warning',
+                           default='cancel'):
+                self.do_del_game()
+        
+    def do_del_game(self):
+        del self.pgn_games[self.pgn_index]
+        self.pgn_index = 0
+        self.change_game_list()
+        self.change_game(1)
+        self.unsaved_state()
 
     def fullback(self):
         self.pgn = self.pgn.game()
@@ -904,7 +972,7 @@ class GUI(tk.Tk):
             arrows.append(chess.svg.Arrow(tail=self.selected_from_square,
                                           head=square,color=color))
         self.pgn.set_arrows(arrows)
-        self.unsaved = True
+        self.unsaved_state()
 
         self.refresh()
 
@@ -1188,7 +1256,7 @@ def parse_cmd_arguments():
 def init():
     parse_cmd_arguments()
     window = GUI()
-    window.new()
+    window.new_file()
     window.mainloop()
 
 if __name__ == '__main__':
