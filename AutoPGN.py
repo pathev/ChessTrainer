@@ -35,9 +35,10 @@ import chess.engine
 import time, datetime
 
 stockfish_path="/usr/games/stockfish"
+# stockfish_path="/usr/bin/stockfish"
 maxthreads = 8
 
-maxCTdiff = 80 # Différence de centipions maximale acceptée dans les scores des coups
+maxCTdiff = 40 # Différence de centipions maximale acceptée dans les scores des coups
 
 asyncio.set_event_loop_policy(chess.engine.EventLoopPolicy())
 
@@ -74,7 +75,7 @@ def total_nodes(pmpv,ompv,depth):
 async def get_node_from(from_depth,pgn_node,tree_depth,engine_depth,ompv,player,pmpv):
     global count
     count+=1
-    if count >= 10:
+    if count >= 10 and pgn_node.turn() != player:
         percent = round(count/approx_totalcount*100,2)
         time_left = (100-percent)*(datetime.datetime.now()-t0).total_seconds()/percent
         print("Approx.", percent, "% done. Time left estimated :", datetime.timedelta(seconds = time_left),end="\r")
