@@ -93,9 +93,9 @@ class Mixin:
         else:
             self.chessboard = self.pgn.board()
             self.maybe_endtraining()
-            
+
     def maybe_endtraining(self):
-        self.set_pgn()
+        self.to_primary_transposition()
         if not self.pgn.variations:
             showinfo("The end","Back to navigation")
             self.stop_training()

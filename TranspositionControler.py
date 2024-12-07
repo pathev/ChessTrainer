@@ -34,5 +34,5 @@ class Mixin:
         pgn = Transposition.get_primary_from_secondary_node(self.pgn)
         if not pgn is None:
             self.pgn = pgn
-            self.set_pgn()
+        self.set_pgn()
 

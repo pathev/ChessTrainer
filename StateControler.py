@@ -124,7 +124,7 @@ class Mixin:
             self.change_comment()
             self.navbar_states()
         self.refresh()
-        if self.editing:
+        if self.editing and not self.training:
             if Transposition.check_secondary(self.pgn):
                 self.canvas.unbind("<Button-1>")
                 self.canvas_unbind_arrow_create()

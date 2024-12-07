@@ -54,7 +54,7 @@ def isolate_primary(pgn):
 def add_secondary_comment(p,s):
     pgn = noeud_transposition[p]
     comment = TPRE.sub('',pgn.comment)
-    pgn.comment = comment + f" [%tp {" ".join(map(str,[p]+transpositions_secondaires[p]))}]"
+    pgn.comment = comment + f" [%tp {' '.join(map(str,[p]+transpositions_secondaires[p]))}]"
 
 def check_comment_secondary(pgn):
     if TLRE.search(pgn.comment):
@@ -139,7 +139,7 @@ def exchange_with_primary(pgn):
     pgn.comment = TLRE.sub('',pgn.comment)
     pgn_p.comment = TPRE.sub('',pgn_p.comment)
     transfert(pgn_p,pgn)
-    pgn.comment += f" [%tp {" ".join(map(str,[s]+transpositions_secondaires[s]))}]"
+    pgn.comment += f" [%tp {' '.join(map(str,[s]+transpositions_secondaires[s]))}]"
 
 
 def link(pgn):
