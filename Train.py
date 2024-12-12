@@ -72,6 +72,7 @@ class Mixin:
 
     def train_go(self):
         self.fen_reglages.withdraw()
+        self.config(menu=tk.Menu(self))
         self.player_color = chess.WHITE if self.val_coul.get() == "white"\
                                         else chess.BLACK
         self.flipped = not self.player_color
@@ -121,6 +122,7 @@ class Mixin:
 
     def stop_training(self):
         self.trainbar.pack_forget()
+        self.config(menu=self.menubar)
         self.training=False
         self.set_pgn()
         if self.editing:
