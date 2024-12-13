@@ -29,6 +29,7 @@
 import asyncio
 
 import tkinter as tk
+import tkinter.font
 from tkinter.messagebox import askokcancel
 from idlelib.tooltip import Hovertip
 
@@ -39,6 +40,8 @@ import StateControler, FileControler
 import EditGame, EditData
 import Train
 import TranspositionControler
+
+FONT = 'Liberation'
 
 class GUI(tk.Tk,
           Arrows.Mixin,
@@ -69,12 +72,18 @@ class GUI(tk.Tk,
         self.minsize(800,608)
         self.protocol('WM_DELETE_WINDOW',self.quit_prog)
 
+        tk.font.nametofont("TkDefaultFont").config(family=f'{FONT} Sans',
+                                                   size=11)
+        tk.font.nametofont("TkFixedFont").config(family=f'{FONT} Mono',
+                                                 size=11)
+        self.option_add("*Menu.Font", (f'{FONT} Sans', 11))
+        
         self.menubar = tk.Menu(self)
         self.config(menu=self.menubar)
 
         self.file_menu = tk.Menu(self.menubar,tearoff=0)
         self.menubar.add_cascade(label="File", menu=self.file_menu)
-        
+
         self.file_menu.add_command(label="New",command=self.before_new_file)
         self.file_menu.add_separator()
         self.file_menu.add_command(label="Open",command=self.load)
@@ -86,14 +95,14 @@ class GUI(tk.Tk,
 
         self.game_menu = tk.Menu(self.menubar,tearoff=0)
         self.menubar.add_cascade(label= "Game", menu=self.game_menu)
-        
+
         self.game_menu.add_command(label="1.",
                                    command=lambda :self.change_game(1))
         self.game_menu.entryconfig("1.", state='disabled')
         self.game_menu.add_command(
             label="New one",
             command=lambda :self.ask_new_fen(self.new_game))
-        
+
         self.vert_sep = tk.PanedWindow(self, orient="horizontal")
         self.vert_sep.pack(fill="both", expand=True)
 
@@ -147,7 +156,7 @@ class GUI(tk.Tk,
                      'Go to primary transposition'])):
             buttons[i] = tk.Button(self.navbar,
                                    text = sym,
-                                   font = ('Bitstream Vera Serif', 17),
+                                   font = (f'{FONT} Serif', 17),
                                    pady=0,state=tk.DISABLED,
                                    command = comm)
             buttons[i].pack(side=tk.LEFT)
@@ -171,7 +180,7 @@ class GUI(tk.Tk,
         self.navbar.pack(fill=tk.X)
 
         self.editbar = tk.Frame(self.buttons_frame)
-        
+
         self.promotebar = tk.Frame(self.editbar)
         self.button_promote_to_main = tk.Button(
             self.promotebar, text="Promote to main",
@@ -187,7 +196,7 @@ class GUI(tk.Tk,
                                        command=self.remove,state=tk.DISABLED)
         self.button_remove.pack(side=tk.LEFT)
         self.promotebar.pack(side=tk.LEFT,fill=tk.X)
-        
+
         self.transpositionbar = tk.Frame(self.editbar)
         buttons = 2*[None]
 
@@ -200,7 +209,7 @@ class GUI(tk.Tk,
             buttons[i] = tk.Button(
                 self.transpositionbar,
                 text = sym,
-                font = ('Bitstream Vera Serif', 17),
+                font = (f'{FONT} Serif', 17),
                 pady=0,state=tk.DISABLED,
                 command = comm)
             buttons[i].pack(side=tk.LEFT)
@@ -228,6 +237,7 @@ class GUI(tk.Tk,
         self.text_fen_line = tk.Text(self.frame_infos,width=50,
                                      state=tk.DISABLED,height=2)
         self.text_fen_line.pack(fill="both")
+        print(self.text_fen_line.cget("font"))
 
         self.hor_sep = tk.PanedWindow(self.frame_infos,orient="vertical")
         self.hor_sep.pack(fill="both",expand=True)
