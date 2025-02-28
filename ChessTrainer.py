@@ -237,7 +237,6 @@ class GUI(tk.Tk,
         self.text_fen_line = tk.Text(self.frame_infos,width=50,
                                      state=tk.DISABLED,height=2)
         self.text_fen_line.pack(fill="both")
-        print(self.text_fen_line.cget("font"))
 
         self.hor_sep = tk.PanedWindow(self.frame_infos,orient="vertical")
         self.hor_sep.pack(fill="both",expand=True)

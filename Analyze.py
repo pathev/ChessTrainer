@@ -14,10 +14,9 @@ class Mixin:
     async def start_analyze(self):
         self.analyzing = True
         self.button_analyze.configure(text="Stop",command=self.stop_analyze)
-        DETACHED_PROCESS = 0x00000008
         self.transport, self.engine =\
             await chess.engine.popen_uci(EngineSettings.ENGINE_PATH,
-                                         creationflags=DETACHED_PROCESS)
+                                         setpgrp=True)
         await self.engine.configure(
             {"Threads":EngineSettings.ENGINE_MAX_THREADS})
         while self.analyzing:
